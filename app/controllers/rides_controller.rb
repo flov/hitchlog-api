@@ -1,5 +1,5 @@
 class RidesController < ApplicationController
-  before_action :set_ride, only: %i[ show update destroy ]
+  before_action :set_ride, only: %i[show update destroy]
 
   # GET /rides
   def index
@@ -39,13 +39,14 @@ class RidesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ride
-      @ride = Ride.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def ride_params
-      params.require(:ride).permit(:title, :story, :waiting_time, :trip_id, :duration, :number, :experience, :vehicle, :youtube, :gender)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ride
+    @ride = Ride.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def ride_params
+    params.require(:ride).permit(:title, :story, :waiting_time, :trip_id, :duration, :number, :experience, :vehicle, :youtube, :gender)
+  end
 end
