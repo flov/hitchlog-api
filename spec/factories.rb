@@ -2,16 +2,25 @@ require "factory_bot"
 require "faker"
 
 FactoryBot.define do
+  factory :ride do
+    title { "MyString" }
+    story { "MyText" }
+    waiting_time { 1 }
+    duration { 1.5 }
+    number { 1 }
+    experience { "MyString" }
+    vehicle { "MyString" }
+    youtube { "MyString" }
+    gender { "MyString" }
+    trip
+  end
+
   factory :user do
     email { Faker::Internet.email }
     username { |u| u.email.split("@").first }
     password { "password" }
-    password_confirmation { "password" }
-    password_salt { "salt" }
+    cs_user { Faker::Internet.username }
     date_of_birth { 23.years.ago }
-    cs_user { Faker::Name.first_name }
-    last_sign_in_at { Time.zone.now }
-    current_sign_in_ip { "195.71.11.67" }
   end
 
   factory :comment do
@@ -28,29 +37,42 @@ FactoryBot.define do
     current_sign_in_ip { "88.73.54.0" }
   end
 
-  factory :ride do
-    trip
-
-    waiting_time { 15 }
-    duration { 2 }
-    youtube { "czau9QSX3fo" }
-  end
-
   factory :country_distance do
     distance { 600000 }
     country { "Germany" }
+  end
+
+  factory :location do
+    city { "Berlin" }
+    country { "Germany" }
+    country_code { "DE" }
+    place_id { "ChIJAVkDPzdOqEcRcDteW2Kq6zA" }
+    lat { 52.520008 }
+    lng { 13.404954 }
   end
 
   factory :trip do
     user
     from { "Tehran" }
     to { "Shiraz" }
+    from_city { "Berlin" }
+    from_country { "Germany" }
+    from_country_code { "DE" }
+    from_place_id { "ChIJAVkDPzdOqEcRcDteW2Kq6zA" }
+    from_lat { 52.520008 }
+    from_lng { 13.404954 }
+    to_city { "Berlin" }
+    to_country { "Germany" }
+    to_country_code { "DE" }
+    to_place_id { "ChIJAVkDPzdOqEcRcDteW2Kq6zA" }
+    to_lat { 52.520008 }
+    to_lng { 13.404954 }
     departure { "07/12/2011 10:00" }
     arrival { "07/12/2011 20:00" }
     travelling_with { 0 }
-    gmaps_duration { 9.hours.to_i }
+    google_duration { 9.hours.to_i }
     distance { 1_646_989 }
-    hitchhikes { 1 }
+    number_of_rides { 1 }
   end
 
   factory :future_trip do

@@ -2,38 +2,40 @@ class RidesController < ApplicationController
   before_action :set_ride, only: %i[show update destroy]
 
   # GET /rides
+  # GET /rides.json
   def index
     @rides = Ride.limit(10)
-
-    render json: @rides
   end
 
   # GET /rides/1
+  # GET /rides/1.json
   def show
-    render json: @ride
   end
 
   # POST /rides
+  # POST /rides.json
   def create
     @ride = Ride.new(ride_params)
 
     if @ride.save
-      render json: @ride, status: :created, location: @ride
+      render :show, status: :created, location: @ride
     else
       render json: @ride.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /rides/1
+  # PATCH/PUT /rides/1.json
   def update
     if @ride.update(ride_params)
-      render json: @ride
+      render :show, status: :ok, location: @ride
     else
       render json: @ride.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /rides/1
+  # DELETE /rides/1.json
   def destroy
     @ride.destroy
   end

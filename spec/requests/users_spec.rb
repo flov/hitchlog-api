@@ -12,9 +12,9 @@ require "rails_helper"
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/locations", type: :request do
+RSpec.describe "/users", type: :request do
   # This should return the minimal set of attributes required to create a valid
-  # Location. As you add validations to Location, be sure to
+  # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -26,7 +26,7 @@ RSpec.describe "/locations", type: :request do
 
   # This should return the minimal set of values that should be in the headers
   # in order to pass any filters (e.g. authentication) defined in
-  # LocationsController, or in your router and rack
+  # UsersController, or in your router and rack
   # middleware. Be sure to keep this updated too.
   let(:valid_headers) {
     {}
@@ -34,48 +34,48 @@ RSpec.describe "/locations", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      Location.create! valid_attributes
-      get locations_url, headers: valid_headers, as: :json
+      User.create! valid_attributes
+      get users_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      location = Location.create! valid_attributes
-      get location_url(location), as: :json
+      user = User.create! valid_attributes
+      get user_url(user), as: :json
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Location" do
+      it "creates a new User" do
         expect {
-          post locations_url,
-            params: {location: valid_attributes}, headers: valid_headers, as: :json
-        }.to change(Location, :count).by(1)
+          post users_url,
+            params: {user: valid_attributes}, headers: valid_headers, as: :json
+        }.to change(User, :count).by(1)
       end
 
-      it "renders a JSON response with the new location" do
-        post locations_url,
-          params: {location: valid_attributes}, headers: valid_headers, as: :json
+      it "renders a JSON response with the new user" do
+        post users_url,
+          params: {user: valid_attributes}, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
 
     context "with invalid parameters" do
-      it "does not create a new Location" do
+      it "does not create a new User" do
         expect {
-          post locations_url,
-            params: {location: invalid_attributes}, as: :json
-        }.to change(Location, :count).by(0)
+          post users_url,
+            params: {user: invalid_attributes}, as: :json
+        }.to change(User, :count).by(0)
       end
 
-      it "renders a JSON response with errors for the new location" do
-        post locations_url,
-          params: {location: invalid_attributes}, headers: valid_headers, as: :json
+      it "renders a JSON response with errors for the new user" do
+        post users_url,
+          params: {user: invalid_attributes}, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -88,28 +88,28 @@ RSpec.describe "/locations", type: :request do
         skip("Add a hash of attributes valid for your model")
       }
 
-      it "updates the requested location" do
-        location = Location.create! valid_attributes
-        patch location_url(location),
-          params: {location: new_attributes}, headers: valid_headers, as: :json
-        location.reload
+      it "updates the requested user" do
+        user = User.create! valid_attributes
+        patch user_url(user),
+          params: {user: new_attributes}, headers: valid_headers, as: :json
+        user.reload
         skip("Add assertions for updated state")
       end
 
-      it "renders a JSON response with the location" do
-        location = Location.create! valid_attributes
-        patch location_url(location),
-          params: {location: new_attributes}, headers: valid_headers, as: :json
+      it "renders a JSON response with the user" do
+        user = User.create! valid_attributes
+        patch user_url(user),
+          params: {user: new_attributes}, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
 
     context "with invalid parameters" do
-      it "renders a JSON response with errors for the location" do
-        location = Location.create! valid_attributes
-        patch location_url(location),
-          params: {location: invalid_attributes}, headers: valid_headers, as: :json
+      it "renders a JSON response with errors for the user" do
+        user = User.create! valid_attributes
+        patch user_url(user),
+          params: {user: invalid_attributes}, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -117,11 +117,11 @@ RSpec.describe "/locations", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested location" do
-      location = Location.create! valid_attributes
+    it "destroys the requested user" do
+      user = User.create! valid_attributes
       expect {
-        delete location_url(location), headers: valid_headers, as: :json
-      }.to change(Location, :count).by(-1)
+        delete user_url(user), headers: valid_headers, as: :json
+      }.to change(User, :count).by(-1)
     end
   end
 end

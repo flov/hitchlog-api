@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_03_131428) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_11_103334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,6 +72,53 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_03_131428) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "place_id"
+    t.string "name"
+    t.string "type_of"
+    t.string "type"
+  end
+
+  create_table "old_users", id: :serial, force: :cascade do |t|
+    t.string "email", limit: 255, null: false
+    t.integer "sign_in_count", default: 0
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.string "current_sign_in_ip", limit: 255
+    t.string "last_sign_in_ip", limit: 255
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.string "username", limit: 255
+    t.boolean "admin", default: false
+    t.string "gender", limit: 255
+    t.float "lat"
+    t.float "lng"
+    t.text "about_you"
+    t.string "cs_user", limit: 255
+    t.string "city", limit: 255
+    t.string "country_code", limit: 255
+    t.string "country", limit: 255
+    t.string "location", limit: 255
+    t.datetime "location_updated_at", precision: nil
+    t.date "date_of_birth"
+    t.string "languages", limit: 255
+    t.string "origin", limit: 255
+    t.string "be_welcome_user", limit: 255
+    t.datetime "reset_password_sent_at", precision: nil
+    t.string "uid", limit: 255
+    t.string "provider", limit: 255
+    t.string "oauth_token", limit: 255
+    t.time "oauth_expires_at"
+    t.string "name", limit: 255
+    t.string "trustroots"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.string "password_digest"
+    t.index ["confirmation_token"], name: "index_old_users_on_confirmation_token", unique: true
+    t.index ["country"], name: "index_old_users_on_country"
+    t.index ["email"], name: "index_old_users_on_email", unique: true
+    t.index ["gender"], name: "index_old_users_on_gender"
+    t.index ["location"], name: "index_old_users_on_location"
+    t.index ["username"], name: "index_old_users_on_username"
   end
 
   create_table "people", id: :serial, force: :cascade do |t|
@@ -210,63 +257,45 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_03_131428) do
     t.string "from_formatted_address", limit: 255
     t.string "to_formatted_address", limit: 255
     t.text "route"
-    t.integer "gmaps_duration"
+    t.integer "google_duration"
     t.string "from_country_code", limit: 255
     t.string "to_country_code", limit: 255
     t.integer "origin_id"
     t.integer "destination_id"
+    t.string "from_place_id"
+    t.string "to_place_id"
+    t.string "from_name"
+    t.string "to_name"
     t.index ["from_country"], name: "index_trips_on_from_country"
+    t.index ["from_lat"], name: "index_trips_on_from_lat"
+    t.index ["from_lng"], name: "index_trips_on_from_lng"
     t.index ["to_country"], name: "index_trips_on_to_country"
     t.index ["travelling_with"], name: "index_trips_on_travelling_with"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
-    t.string "email", limit: 255, null: false
-    t.string "encrypted_password", limit: 128, null: false
-    t.string "password_salt", limit: 255
-    t.string "reset_password_token", limit: 255
-    t.string "remember_token", limit: 255
-    t.datetime "remember_created_at", precision: nil
-    t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
-    t.string "current_sign_in_ip", limit: 255
-    t.string "last_sign_in_ip", limit: 255
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "username", limit: 255
-    t.boolean "admin", default: false
-    t.string "gender", limit: 255
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "gender"
     t.float "lat"
     t.float "lng"
     t.text "about_you"
-    t.string "cs_user", limit: 255
-    t.string "city", limit: 255
-    t.string "country_code", limit: 255
-    t.string "country", limit: 255
-    t.string "location", limit: 255
-    t.datetime "location_updated_at", precision: nil
-    t.date "date_of_birth"
-    t.string "languages", limit: 255
-    t.string "origin", limit: 255
-    t.string "be_welcome_user", limit: 255
-    t.datetime "reset_password_sent_at", precision: nil
-    t.string "uid", limit: 255
-    t.string "provider", limit: 255
-    t.string "oauth_token", limit: 255
-    t.time "oauth_expires_at"
-    t.string "name", limit: 255
+    t.string "cs_user"
+    t.string "city"
+    t.string "country_code"
+    t.string "country"
+    t.string "location"
+    t.string "languages"
+    t.string "origin"
+    t.string "be_welcome_user"
+    t.string "uid"
+    t.string "provider"
+    t.string "name"
     t.string "trustroots"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at", precision: nil
-    t.datetime "confirmation_sent_at", precision: nil
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["country"], name: "index_users_on_country"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["gender"], name: "index_users_on_gender"
-    t.index ["location"], name: "index_users_on_location"
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["username"], name: "index_users_on_username"
+    t.date "date_of_birth"
   end
 
 end
