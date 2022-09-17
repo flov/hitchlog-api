@@ -10,9 +10,9 @@ class TripsController < ApplicationController
         from_lat_lt: params["north_lat"],
         from_lng_gt: params["west_lng"],
         from_lng_lt: params["east_lng"]
-      ).result.includes(:rides).limit(20)
+      ).result.order(id: :desc).limit(24)
     else
-      Trip.order(id: :desc).limit(20)
+      Trip.order(id: :desc).limit(24)
     end
   end
 

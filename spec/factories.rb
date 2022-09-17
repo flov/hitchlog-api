@@ -21,6 +21,8 @@ FactoryBot.define do
     password { "password" }
     cs_user { Faker::Internet.username }
     date_of_birth { 23.years.ago }
+    gender { Faker::Gender.binary_type }
+    about_you { Faker::Fantasy::Tolkien.poem }
   end
 
   factory :comment do

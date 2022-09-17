@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "/trips", type: :request do
-  include JsonWebToken
-
   let(:valid_attributes) {
     {trip: {origin: {place_id: "ChIJAVkDPzdOqEcRcDteW0YgIQQ",
                      lat: 52.52000659999999,
@@ -44,7 +42,7 @@ RSpec.describe "/trips", type: :request do
     it "renders a successful response" do
       create(:trip, from_city: "Kiew", to_city: "Krakow")
       get trips_url, headers: logged_in_headers, as: :json
-      expect(response).to include("Kiew")
+      expect(response.body).to include("Kiew")
     end
   end
 
@@ -138,6 +136,7 @@ RSpec.describe "/trips", type: :request do
         expect {
           delete trip_url(trip), as: :json
         }.to change(Trip, :count).by(0)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
