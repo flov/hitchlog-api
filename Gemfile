@@ -14,6 +14,7 @@ gem "bcrypt", "~> 3.1.7"
 # JWT for token based authentication
 gem "jwt"
 gem "ransack"
+gem "devise"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -32,3 +33,5 @@ group :development do
   gem "solargraph"
   gem "hirb"
 end
+
+gem "devise-jwt", "~> 0.10.0"
