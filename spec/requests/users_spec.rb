@@ -32,10 +32,18 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /show" do
-    xit "renders a successful response" do
-      user = User.create! valid_attributes
-      get user_url(user), as: :json
-      expect(response).to be_successful
+    context "query by id" do
+      it "renders a successful response" do
+        get user_url(user.id), as: :json
+        expect(response).to be_successful
+      end
+    end
+    context "query by username" do
+      it "renders a successful response" do
+        get user_url(user.username), as: :json
+        user_url(user.username, {username: true})
+        expect(response).to be_successful
+      end
     end
   end
 

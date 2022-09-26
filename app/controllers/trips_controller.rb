@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: %i[show update destroy]
-  before_action :authenticate_request, only: %i[create update destroy]
+  before_action :authenticate_user!, only: %i[create update destroy]
 
   def index
     params.permit("south_lat", "north_lat", "east_lng", "west_lng")
@@ -22,7 +22,7 @@ class TripsController < ApplicationController
   # POST /trips
   def create
     @trip = Trip.new(trip_params)
-    @trip.user = @current_user
+    @trip.user = current_user
     # adds the origin and destination to the trip
     if origin_params["origin"] && destination_params["destination"]
       origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }

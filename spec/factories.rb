@@ -2,6 +2,11 @@ require "factory_bot"
 require "faker"
 
 FactoryBot.define do
+  factory :jwt_denylist do
+    jti { "MyString" }
+    exp { "2022-09-17 18:11:35" }
+  end
+
   factory :ride do
     title { "MyString" }
     story { "MyText" }
@@ -17,7 +22,7 @@ FactoryBot.define do
 
   factory :user do
     email { Faker::Internet.email }
-    username { |u| u.email.split("@").first }
+    username { Faker::Internet.username }
     password { "password" }
     cs_user { Faker::Internet.username }
     date_of_birth { 23.years.ago }

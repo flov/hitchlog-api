@@ -6,6 +6,9 @@ json.arrival trip.arrival
 json.travelling_with trip.travelling_with
 json.google_duration trip.google_duration
 json.total_distance trip.distance
+json.user_id trip.user_id
+json.age_at_trip trip.age_at_trip
+json.average_speed trip.average_speed
 if trip.old_user
   json.user do
     json.username trip.old_user.username
@@ -13,7 +16,6 @@ if trip.old_user
   end
 else
   json.user do
-    json.user_id trip.user.id
     json.username trip.user.username
     json.gender trip.user.gender
   end
@@ -35,5 +37,5 @@ json.destination do
   # json.place_id trip.destination.place_id
 end
 json.rides do
-  json.array! trip.rides, partial: "rides/ride", as: :ride
+  json.array! trip.rides.order(id: :asc), partial: "rides/ride", as: :ride
 end
