@@ -11,7 +11,7 @@ json.created_at @user.created_at
 json.cs_user @user.cs_user
 json.trustroots @user.trustroots
 json.no_of_stories @user.no_of_stories
-json.be_welcome_user @user.be_welcome_user 
+json.be_welcome_user @user.be_welcome_user
 json.no_of_comments @user.no_of_comments
 json.average_speed @user.average_speed
 json.average_waiting_time @user.average_waiting_time

@@ -4,7 +4,8 @@ class UsersController < ApplicationController
 
   # GET /users.json
   def index
-    @users = User.limit(10)
+    @page = params[:page] || 1
+    @users = User.order(created_at: :desc).page(@page)
   end
 
   def profile

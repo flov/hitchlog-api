@@ -9,16 +9,9 @@ json.total_distance trip.distance
 json.user_id trip.user_id
 json.age_at_trip trip.age_at_trip
 json.average_speed trip.average_speed
-if trip.old_user
-  json.user do
-    json.username trip.old_user.username
-    json.gender trip.old_user.gender
-  end
-else
-  json.user do
-    json.username trip.user.username
-    json.gender trip.user.gender
-  end
+json.user do
+  json.username trip.user.username
+  json.gender trip.user.gender
 end
 json.origin do
   json.country_code trip.from_country_code

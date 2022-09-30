@@ -1,0 +1,12 @@
+<h1>Welcome to the Hitchlog <%= @resource.username %>!</h1>
+
+<p>You have successfully signed up to hitchlog.com</p>
+<p>your username is: <%= @resource.username %>.</p>
+
+<p>To confirm your account, please follow this link:</p>
+
+<p><%= link_to 'Confirm my account', "#{ENV['FRONTEND']}/confirm_account?token=#{@token}" %></p>
+
+<p>
+Happy Hitchhiking, The Hitchlog
+</p>

@@ -1,0 +1,10 @@
+Welcome to Hitchlog, <%= @resource.username %>
+===========================
+
+You have successfully signed up to hitchlog.com,
+your username is: <%= @resource.username %>.
+
+To confirm your account, please follow this link:
+<%= "#{ENV['FRONTEND']}/confirm_account?token=#{@token}" %>.
+
+Thanks for joining and happy hitchhiking!

@@ -24,10 +24,16 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /index" do
-    xit "renders a successful response" do
-      User.create! valid_attributes
+    it "renders a successful response" do
+      create (:user)
       get users_url, headers: valid_headers, as: :json
       expect(response).to be_successful
+    end
+
+    it 'paginates users' do
+      26.times { create (:user) }
+      get users_url({ page: 2 }), as: :json
+      expect(JSON.parse(response.body).size).to eq(1)
     end
   end
 
