@@ -1,24 +1,12 @@
-# README
+# Rails 7 API only app for the hitchlog
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+- JWT Authentication with devise-jwt
 
-Things you may want to cover:
+## Install
 
-* Ruby version
+Edit the content of `.env.example` and copy it over to `.env`
+`bundle install`
+`rake db:schema:load && rake db:migrate`
+should do the trick
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Then `rails s` to start the server
