@@ -1,23 +1,24 @@
 require "rails_helper"
 
-RSpec.describe "/users", type: :request do
-  let(:valid_attributes) {}
-  let(:invalid_attributes) {}
-  let(:valid_headers) { {} }
+RSpec.describe UsersController, type: :request do
+  let(:invalid_attributes) {{blabla: 'yoo'}}
   let(:user) { create(:user) }
-  let(:token) { jwt_encode({user_id: user.id}) }
-  let(:logged_in_headers) { {Authorization: token} }
+  let(:headers) {{
+    'Accept' => 'application/json',
+    'Content-Type' => 'application/json' 
+  }}
+  let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
 
   describe "GET /me" do
     context "logged in" do
       it "renders a JSON response with the user" do
-        get me_users_url, headers: logged_in_headers, as: :json
+        get me_users_url, headers: auth_headers, as: :json
         expect(response).to be_successful
       end
     end
     context "logged out" do
       it "returns unauthenticated" do
-        get me_users_url, as: :json
+        get me_users_url, headers: headers, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -26,14 +27,14 @@ RSpec.describe "/users", type: :request do
   describe "GET /index" do
     it "renders a successful response" do
       create (:user)
-      get users_url, headers: valid_headers, as: :json
+      get users_url, as: :json
       expect(response).to be_successful
     end
 
     it 'paginates users' do
       26.times { create (:user) }
       get users_url({ page: 2 }), as: :json
-      expect(JSON.parse(response.body).size).to eq(1)
+      expect(JSON.parse(response.body)["users"].size).to eq(1)
     end
   end
 
@@ -53,79 +54,37 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      xit "creates a new User" do
-        expect {
-          post users_url,
-            params: {user: valid_attributes}, headers: valid_headers, as: :json
-        }.to change(User, :count).by(1)
-      end
-
-      xit "renders a JSON response with the new user" do
-        post users_url,
-          params: {user: valid_attributes}, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-
-    context "with invalid parameters" do
-      xit "does not create a new User" do
-        expect {
-          post users_url,
-            params: {user: invalid_attributes}, as: :json
-        }.to change(User, :count).by(0)
-      end
-
-      xit "renders a JSON response with errors for the new user" do
-        post users_url,
-          params: {user: invalid_attributes}, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-  end
-
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {username: "new_username", about_you: "new_about_you"}
       }
 
-      xit "updates the requested user" do
-        user = User.create! valid_attributes
-        patch user_url(user),
-          params: {user: new_attributes}, headers: valid_headers, as: :json
+      it "updates the requested user" do
+        user
+        patch "/users/#{user.username}",
+          params: {user: new_attributes},
+          headers: auth_headers,
+          as: :json
         user.reload
-        skip("Add assertions for updated state")
+        expect(user.username).to eq("new_username")
+        expect(user.about_you).to eq("new_about_you")
       end
 
-      xit "renders a JSON response with the user" do
-        user = User.create! valid_attributes
+      it "renders a JSON response with the user" do
         patch user_url(user),
-          params: {user: new_attributes}, headers: valid_headers, as: :json
+          params: {user: new_attributes}, headers: auth_headers, as: :json
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-
-    context "with invalid parameters" do
-      xit "renders a JSON response with errors for the user" do
-        user = User.create! valid_attributes
-        patch user_url(user),
-          params: {user: invalid_attributes}, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
   end
 
   describe "DELETE /destroy" do
-    xit "destroys the requested user" do
-      user = User.create! valid_attributes
+    it "destroys the requested user" do
+      user
       expect {
-        delete user_url(user), headers: valid_headers, as: :json
+        delete user_url(user), headers: auth_headers, as: :json
       }.to change(User, :count).by(-1)
     end
   end

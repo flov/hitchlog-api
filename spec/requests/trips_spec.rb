@@ -25,8 +25,12 @@ RSpec.describe "/trips", type: :request do
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
   let(:user) { create(:user) }
-  let(:token) { jwt_encode({user_id: user.id}) }
-  let(:logged_in_headers) { {Authorization: token} }
+  let(:headers) {{
+    'Accept' => 'application/json',
+    'Content-Type' => 'application/json' 
+  }}
+  let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
+
 
   describe "GET /index" do
     context "searches with parameters" do
@@ -41,7 +45,7 @@ RSpec.describe "/trips", type: :request do
 
     it "renders a successful response" do
       create(:trip, from_city: "Kiew", to_city: "Krakow")
-      get trips_url, headers: logged_in_headers, as: :json
+      get trips_url, headers: auth_headers, as: :json
       expect(response.body).to include("Kiew")
     end
   end
@@ -59,13 +63,13 @@ RSpec.describe "/trips", type: :request do
       it "creates a new Trip" do
         expect {
           post trips_url,
-            params: valid_attributes, headers: logged_in_headers, as: :json
+            params: valid_attributes, headers: auth_headers, as: :json
         }.to change(Trip, :count).by(1)
       end
 
       it "renders a JSON response with the new trip" do
         post trips_url,
-          params: valid_attributes, headers: logged_in_headers, as: :json
+          params: valid_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -81,7 +85,7 @@ RSpec.describe "/trips", type: :request do
 
       it "renders a JSON response with errors for the new trip" do
         post trips_url,
-          params: invalid_attributes, headers: logged_in_headers, as: :json
+          params: invalid_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -95,7 +99,7 @@ RSpec.describe "/trips", type: :request do
       xit "updates the requested trip" do
         trip = Trip.create! valid_attributes
         patch trip_url(trip),
-          params: {trip: new_attributes}, headers: logged_in_headers, as: :json
+          params: {trip: new_attributes}, headers: auth_headers, as: :json
         trip.reload
         skip("Add assertions for updated state")
       end
@@ -103,7 +107,7 @@ RSpec.describe "/trips", type: :request do
       xit "renders a JSON response with the trip" do
         trip = Trip.create! valid_attributes
         patch trip_url(trip),
-          params: {trip: new_attributes}, headers: logged_in_headers, as: :json
+          params: {trip: new_attributes}, headers: auth_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -113,7 +117,7 @@ RSpec.describe "/trips", type: :request do
       xit "renders a JSON response with errors for the trip" do
         trip = Trip.create! valid_attributes
         patch trip_url(trip),
-          params: {trip: invalid_attributes}, headers: logged_in_headers, as: :json
+          params: {trip: invalid_attributes}, headers: auth_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -125,7 +129,7 @@ RSpec.describe "/trips", type: :request do
       it "destroys the requested trip" do
         trip = create(:trip)
         expect {
-          delete trip_url(trip), headers: logged_in_headers, as: :json
+          delete trip_url(trip), headers: auth_headers, as: :json
         }.to change(Trip, :count).by(-1)
       end
     end
