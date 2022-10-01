@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, only: %i[me create update destroy]
-  before_action :set_user, only: %i[show profile destroy]
+  before_action :set_user, only: %i[show update profile destroy]
 
   # GET /users.json
   def index
@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1.json
   def update
+    return render json: {error: "user not found"} if !@user
     if @user.update(user_params)
       render :show, status: :ok, location: @user
     else
@@ -45,15 +46,24 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = if params[:username]
-      User.find_by_username(params[:id])
-    else
-      User.find_by_id(params[:id])
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      @user = User.find_by_username(params[:id])
     end
   end
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.fetch(:user, {})
+    params.fetch(:user, {}).permit(
+      :username,
+      :email,
+      :cs_user,
+      :be_welcome_user,
+      :trustroots,
+      :gender,
+      :about_you,
+      :languages,
+    )
   end
 end

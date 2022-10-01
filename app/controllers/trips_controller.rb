@@ -12,7 +12,7 @@ class TripsController < ApplicationController
         from_lng_lt: params["east_lng"]
       ).result.order(id: :desc).limit(24)
     else
-      Trip.order(id: :desc).limit(24)
+      Trip.order(id: :desc).page(params[:page] || 1)
     end
   end
 
