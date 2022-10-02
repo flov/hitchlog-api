@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validates :username,
     presence: true,
     uniqueness: true,
-    format: {with: /\A[A-Za-z\d._-]+\z/}
+    format: {with: /\A[A-Za-z\d_-]+\z/}
 
   def hitchhiked_countries
     trips.map { |trip| trip.country_distances.map(&:country) }.flatten.uniq.size
