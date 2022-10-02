@@ -1,1 +1,10 @@
-json.extract! ride, :id, :title, :story, :waiting_time, :duration, :number, :experience, :vehicle, :youtube, :gender
+json.id ride.id
+json.title ride.title
+json.story ride.story
+json.waiting_time ride.waiting_time
+json.duration ride.duration
+json.number ride.number
+json.experience ride.experience
+json.vehicle ride.vehicle
+json.youtube ride.youtube
+json.gender ride.gender

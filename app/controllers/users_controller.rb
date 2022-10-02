@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1.json
   def update
-    return render json: {error: "user not found"} if !@user
+    return render json: {error: "user not found"}, status: :not_found if !@user
     if @user.update(user_params)
       render :show, status: :ok, location: @user
     else
@@ -64,6 +64,12 @@ class UsersController < ApplicationController
       :gender,
       :about_you,
       :languages,
+      :city,
+      :country,
+      :country_code,
+      :formatted_address,
+      :lat,
+      :lng
     )
   end
 end

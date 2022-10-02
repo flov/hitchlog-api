@@ -45,7 +45,7 @@ class Trip < ApplicationRecord
 
   def average_speed
     return 0 if duration == 0 || distance.nil?
-    "#{((distance / 1000) / (duration / 60 / 60)).round} kmh"
+    "#{((distance / 1000) / (duration / 60 / 60)).round} km/h"
   end
 
   def kmh

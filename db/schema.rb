@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_28_222249) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_02_125525) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -245,7 +245,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_222249) do
     t.string "city", limit: 255
     t.string "country_code", limit: 255
     t.string "country", limit: 255
-    t.string "location", limit: 255
+    t.string "formatted_address", limit: 255
     t.datetime "location_updated_at", precision: nil
     t.date "date_of_birth"
     t.string "languages", limit: 255
@@ -265,8 +265,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_222249) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["country"], name: "index_users_on_country"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["formatted_address"], name: "index_users_on_formatted_address"
     t.index ["gender"], name: "index_users_on_gender"
-    t.index ["location"], name: "index_users_on_location"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username"
   end

@@ -3,16 +3,12 @@ class TripsController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy]
 
   def index
-    params.permit("south_lat", "north_lat", "east_lng", "west_lng")
-    @trips = if params["south_lat"] && params["north_lat"] && params["east_lng"] && params["west_lng"]
-      Trip.ransack(
-        from_lat_gt: params["south_lat"],
-        from_lat_lt: params["north_lat"],
-        from_lng_gt: params["west_lng"],
-        from_lng_lt: params["east_lng"]
-      ).result.order(id: :desc).limit(24)
+    @page = params[:page] || 1
+    @trips = if params[:q].present?
+      @search = Trip.includes(:rides).ransack(JSON.parse(params[:q]))
+      @trips = @search.result(distinct: true).order(created_at: :desc).page(@page)
     else
-      Trip.order(id: :desc).page(params[:page] || 1)
+      Trip.order(id: :desc).page(@page)
     end
   end
 

@@ -13,6 +13,10 @@ json.cs_user user.cs_user
 json.be_welcome_user user.be_welcome_user
 json.trustroots user.trustroots
 json.location do
-  json.name user.location
+  json.lat user.lat
+  json.lng user.lng
+  json.formatted_address user.formatted_address
+  json.city user.city
+  json.country user.country
   json.country_code user.country_code
 end
