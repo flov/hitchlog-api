@@ -22,9 +22,9 @@ FactoryBot.define do
 
   factory :user do
     email { Faker::Internet.email }
-    username { Faker::Internet.username }
+    username { Faker::Internet.username(separators: %w[_]) }
     password { "password" }
-    cs_user { Faker::Internet.username }
+    cs_user { Faker::Internet.username(separators: %w[_]) }
     date_of_birth { 23.years.ago }
     gender { Faker::Gender.binary_type }
     about_you { Faker::Fantasy::Tolkien.poem }
