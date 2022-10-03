@@ -9,12 +9,6 @@ class RidesController < ApplicationController
     @rides = Ride.limit(10)
   end
 
-  # GET /rides/1
-  # GET /rides/1.json
-  def show
-  end
-
-  # POST /rides
   # POST /rides.json
   def create
     @ride = Ride.new(ride_params)

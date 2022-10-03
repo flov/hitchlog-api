@@ -9,6 +9,13 @@ json.total_distance trip.distance
 json.user_id trip.user_id
 json.age_at_trip trip.age_at_trip
 json.average_speed trip.average_speed
+json.country_distances do
+  json.array! trip.country_distances do |country|
+    json.country country.country
+    json.country_code country.country_code
+    json.distance country.distance
+  end
+end
 json.user do
   json.username trip.user.username
   json.gender trip.user.gender
