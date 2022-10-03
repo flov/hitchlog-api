@@ -10,7 +10,7 @@ RSpec.describe User, type: :model do
   describe "valid?" do
     describe "#username" do
       it 'allows all these letters: /A-Za-z\d_-/' do
-        user.username = "Abc1239_."
+        user.username = "Abc1239_"
         expect(user).to be_valid
       end
     end

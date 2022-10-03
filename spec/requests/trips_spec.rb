@@ -25,12 +25,13 @@ RSpec.describe "/trips", type: :request do
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
   let(:user) { create(:user) }
-  let(:headers) {{
-    'Accept' => 'application/json',
-    'Content-Type' => 'application/json' 
-  }}
+  let(:headers) {
+    {
+      "Accept" => "application/json",
+      "Content-Type" => "application/json"
+    }
+  }
   let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
-
 
   describe "GET /index" do
     context "searches with parameters" do

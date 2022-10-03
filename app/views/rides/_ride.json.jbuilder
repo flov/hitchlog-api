@@ -8,3 +8,4 @@ json.experience ride.experience
 json.vehicle ride.vehicle
 json.youtube ride.youtube
 json.gender ride.gender
+json.tags ride.tag_list

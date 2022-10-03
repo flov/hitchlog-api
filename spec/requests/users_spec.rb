@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
-  let(:invalid_attributes) {{blabla: 'yoo'}}
+  let(:invalid_attributes) { {blabla: "yoo"} }
   let(:user) { create(:user) }
-  let(:headers) {{
-    'Accept' => 'application/json',
-    'Content-Type' => 'application/json' 
-  }}
+  let(:headers) {
+    {
+      "Accept" => "application/json",
+      "Content-Type" => "application/json"
+    }
+  }
   let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
 
   describe "GET /me" do
@@ -26,14 +28,14 @@ RSpec.describe UsersController, type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      create (:user)
+      create(:user)
       get users_url, as: :json
       expect(response).to be_successful
     end
 
-    it 'paginates users' do
-      26.times { create (:user) }
-      get users_url({ page: 2 }), as: :json
+    it "paginates users" do
+      26.times { create(:user) }
+      get users_url({page: 2}), as: :json
       expect(JSON.parse(response.body)["users"].size).to eq(1)
     end
   end
