@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get "profile"
+      get "geomap"
     end
     collection do
       get "me"

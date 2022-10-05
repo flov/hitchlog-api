@@ -16,6 +16,13 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#md5_email' do
+    it 'returns the md5 hash of the email' do
+      user.email = "flo@hitchlog.com"
+      expect(user.md5_email).to eq("b06f0acce61bb3ff40be64ae529c3384")
+    end
+  end
+
   describe "gender" do
     before { user.trips << FactoryBot.build(:trip) }
     it "should display percentage of genders of people who picked you up" do

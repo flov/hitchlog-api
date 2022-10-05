@@ -11,6 +11,13 @@ RSpec.describe UsersController, type: :request do
   }
   let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
 
+  describe "GET /geomap" do
+    it "returns a success response" do
+      get geomap_user_url(user), headers: headers
+      expect(response).to be_successful
+    end
+  end
+
   describe "GET /me" do
     context "logged in" do
       it "renders a JSON response with the user" do
@@ -18,6 +25,7 @@ RSpec.describe UsersController, type: :request do
         expect(response).to be_successful
       end
     end
+
     context "logged out" do
       it "returns unauthenticated" do
         get me_users_url, headers: headers, as: :json

@@ -20,7 +20,19 @@ class User < ApplicationRecord
     format: {with: /\A[A-Za-z\d_-]+\z/}
 
   def hitchhiked_countries
-    trips.map { |trip| trip.country_distances.map(&:country) }.flatten.uniq.size
+    hash = {}
+    self.trips.includes(:country_distances).map(&:country_distances).flatten.each do |cd|
+      if hash[cd.country_code]
+        hash[cd.country_code] += cd.distance
+      else
+        hash[cd.country_code] = cd.distance
+      end
+    end
+    hash
+  end
+
+  def md5_email
+    Digest::MD5.hexdigest(email)
   end
 
   def hitchhiked_kms
@@ -44,12 +56,9 @@ class User < ApplicationRecord
   end
 
   def average_waiting_time
-    waiting_time = trips.map { |trip| trip.rides.map { |hh| hh.waiting_time } }.flatten.compact
-    if waiting_time.size == 0
-      nil
-    else
-      waiting_time.sum / waiting_time.size
-    end
+    waiting_time = User.includes(:trips).includes(:rides).where(username: username).average(:waiting_time)
+    return nil if waiting_time == 0 || waiting_time.nil?
+    waiting_time.round
   end
 
   def average_drivers_age
@@ -59,6 +68,7 @@ class User < ApplicationRecord
 
   def average_speed
     avg_speed_of_trips = trips.collect(&:average_speed).map(&:to_i)
+    return if avg_speed_of_trips.size == 0
     "#{avg_speed_of_trips.sum / avg_speed_of_trips.size} kmh"
   end
 
@@ -66,6 +76,20 @@ class User < ApplicationRecord
     ((Date.today - date_of_birth) / 365).to_i if date_of_birth
   end
 
+  def to_geomap
+    hash = {"distances"=>{},"trip_count"=>{}}
+    self.trips.flat_map(&:country_distances).each do |cd|
+      if hash["distances"][Countries[cd.country]]
+        hash["distances"][Countries[cd.country]] += cd.distance / 1000
+        hash["trip_count"][Countries[cd.country]] += 1
+      else
+        hash["distances"][Countries[cd.country]] = cd.distance / 1000
+        hash["trip_count"][Countries[cd.country]] = 1
+      end
+    end
+    hash
+  end
+  
   def age_of_trips
     return unless date_of_birth
 
