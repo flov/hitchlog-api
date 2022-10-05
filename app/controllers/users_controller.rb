@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, only: %i[me create update destroy]
-  before_action :set_user, only: %i[show update profile destroy]
+  before_action :set_user, only: %i[geomap show update profile destroy]
+  before_action :user_owner?, only: %i[update destroy]
 
   # GET /users.json
   def index
@@ -42,7 +43,14 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  def geomap
+  end
+
   private
+
+  def user_owner?
+    render json: {error: "not authorized"}, status: :unauthorized if @user != current_user
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user

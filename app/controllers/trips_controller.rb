@@ -1,6 +1,7 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: %i[show update destroy]
   before_action :authenticate_user!, only: %i[create update destroy]
+  before_action :trip_owner?, only: %i[update destroy]
 
   def index
     @page = params[:page] || 1
@@ -47,6 +48,10 @@ class TripsController < ApplicationController
   end
 
   private
+
+  def trip_owner?
+    render json: {error: "not authorized"}, status: :unauthorized if @trip.user != current_user
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_trip
