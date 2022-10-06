@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: postgres:14.5
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+  app:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    ports:
+      - "3010:3000"
+    depends_on:
+      - db
+    environment:
+      - GOOGLE_MAPS=AIzaSyD3jCmxfmJm9Mm-XS9zSGZ-4eGAh-vqDs0
+      - SMTP_PASSWORD=e68fe3db9c100b6b246961810fcd1500
+      - SMTP_ADDRESS=send.smtp.mailtrap.io
+      - SMTP_DOMAIN=send.smtp.mailtrap.io
+      - SMTP_PORT=2525
+      - FRONTEND=http://localhost:3000
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
