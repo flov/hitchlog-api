@@ -8,15 +8,11 @@ FactoryBot.define do
   end
 
   factory :ride do
-    title { "MyString" }
-    story { "MyText" }
-    waiting_time { 1 }
-    duration { 1.5 }
-    number { 1 }
-    experience { "MyString" }
-    vehicle { "MyString" }
-    youtube { "MyString" }
-    gender { "MyString" }
+    title { "title" }
+    story { "story" }
+    waiting_time { 4 }
+    duration { 3.5 }
+    experience { "good" }
     trip
   end
 

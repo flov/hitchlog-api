@@ -32,8 +32,8 @@ json.travelling_with do
   json.with_four @user.trips.with_four.size
 end
 json.experiences do
-  json.very_good @user.very_good_experiences if @user.very_good_experiences
-  json.good @user.good_experiences if @user.good_experiences
+  json.very_good @user.very_good_experiences if @user.very_good_experiences > 0
+  json.good @user.good_experiences if @user.good_experiences > 0
   json.neutral @user.neutral_experiences if @user.neutral_experiences > 0
   json.bad @user.bad_experiences if @user.bad_experiences != 0
   json.very_bad @user.very_bad_experiences if @user.very_bad_experiences != 0

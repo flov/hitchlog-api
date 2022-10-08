@@ -9,17 +9,6 @@ class RidesController < ApplicationController
     @rides = Ride.limit(10)
   end
 
-  # POST /rides.json
-  def create
-    @ride = Ride.new(ride_params)
-
-    if @ride.save
-      render :show, status: :created, location: @ride
-    else
-      render json: @ride.errors, status: :unprocessable_entity
-    end
-  end
-
   # PATCH/PUT /rides/1.json
   def update
     if @ride.update(ride_params)

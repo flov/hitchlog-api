@@ -2,7 +2,20 @@ require "rails_helper"
 
 RSpec.describe "/trips", type: :request do
   let(:valid_attributes) {
-    {trip: {origin: {place_id: "ChIJAVkDPzdOqEcRcDteW0YgIQQ",
+    {trip: {
+      country_distances: [
+        {
+            "country": "Ethiopia",
+            "country_code": "ET",
+            "distance": 686342
+        },
+        {
+            "country": "Somalia",
+            "country_code": "SO",
+            "distance": 354525
+        }
+      ],
+      origin: {place_id: "ChIJAVkDPzdOqEcRcDteW0YgIQQ",
                      lat: 52.52000659999999,
                      lng: 13.404954,
                      city: "Berlin",
@@ -48,6 +61,23 @@ RSpec.describe "/trips", type: :request do
       create(:trip, from_city: "Kiew", to_city: "Krakow")
       get trips_url, headers: auth_headers, as: :json
       expect(response.body).to include("Kiew")
+    end
+  end
+
+  describe "POST /create" do
+    context "with valid parameters" do
+      it "creates a new Trip" do
+        expect {
+          post trips_url, params: valid_attributes, headers: auth_headers, as: :json
+        }.to change(Trip, :count).by(1)
+        expect(response).to have_http_status(:created)
+      end
+
+      it "renders a JSON with country distances inside the trip" do
+        post trips_url, params: valid_attributes, headers: auth_headers, as: :json
+        expect(response.body).to include("Ethiopia")
+        expect(response.body).to include("Somalia")
+      end
     end
   end
 

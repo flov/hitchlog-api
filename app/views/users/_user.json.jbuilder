@@ -1,4 +1,5 @@
 json.id user.id
+json.md5_email user.md5_email
 json.username user.username
 json.email user.email
 json.gender user.gender

@@ -25,6 +25,11 @@ class TripsController < ApplicationController
       origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }
       destination_params["destination"].each { |k, v| @trip.send("to_#{k}=", v) }
     end
+    if country_distances_params["trip"]["country_distances"]
+      @trip.country_distances.build(
+        country_distances_params["trip"]["country_distances"]
+      )
+    end
 
     if @trip.save
       render :show, status: :created, location: @trip
@@ -68,6 +73,10 @@ class TripsController < ApplicationController
       :distance,
       :travelling_with
     )
+  end
+
+  def country_distances_params
+    params.permit(trip: [country_distances: [:country, :country_code, :distance]])
   end
 
   def origin_params
