@@ -19,6 +19,7 @@ end
 json.user do
   json.username trip.user.username
   json.gender trip.user.gender
+  json.md5_email trip.user.md5_email
 end
 json.origin do
   json.country_code trip.from_country_code
