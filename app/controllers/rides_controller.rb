@@ -27,7 +27,7 @@ class RidesController < ApplicationController
 
   def prove_ownership
     if @ride.trip.user != current_user
-      render json: {errors: "You are not authorized"}, status: :unauthorized
+      render json: {errors: "You are not authorized"}, status: :forbidden
     end
   end
 

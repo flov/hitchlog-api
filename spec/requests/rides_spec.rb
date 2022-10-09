@@ -7,7 +7,7 @@ RSpec.describe "/rides", type: :request do
         id:7321,
         vehicle:"bus",
         waiting_time:"13",
-        story:"Took the Bemo out of town, which cost me 5000 rs, so not really a real hitchhike",
+        story:"Took the Bemo out of town",
         title:"Hello ",
         experience:"very good"
       }
@@ -16,29 +16,21 @@ RSpec.describe "/rides", type: :request do
   let(:user) { create(:user) }
   let(:trip) { create(:trip, user: user) }
   let(:ride) { create(:ride, trip: trip) }
-  let(:headers) {
+  let(:valid_headers) {
     {
       "Accept" => "application/json",
       "Content-Type" => "application/json"
     }
   }
-  let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
+  let(:auth_headers) { JWTHelpers.auth_headers(valid_headers, user) }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  # This should return the minimal set of values that should be in the headers
-  # in order to pass any filters (e.g. authentication) defined in
-  # RidesController, or in your router and rack
-  # middleware. Be sure to keep this updated too.
-  let(:valid_headers) {
-    {}
+    {experience: 'non-existant'}
   }
 
   describe "GET /index" do
     it "renders a successful response" do
-      create :ride
+      ride
       get rides_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
@@ -67,9 +59,8 @@ RSpec.describe "/rides", type: :request do
 
     context "with invalid parameters" do
       it "renders a JSON response with errors for the ride" do
-        ride = create(:ride)
         patch ride_url(ride),
-          params: {ride: invalid_attributes}, headers: valid_headers, as: :json
+          params: {ride: invalid_attributes}, headers: auth_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -77,11 +68,35 @@ RSpec.describe "/rides", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested ride" do
-      ride
-      expect {
-        delete ride_url(ride), headers: auth_headers, as: :json
-      }.to change(Ride, :count).by(-1)
+    context "logged in" do
+      context "as the owner" do
+        it "destroys the requested ride" do
+          ride
+          expect {
+            delete ride_url(ride), headers: auth_headers, as: :json
+          }.to change(Ride, :count).by(-1)
+        end
+      end
+
+      context "as a different user" do
+        it "does not destroy the requested ride" do
+          ride
+          expect {
+            delete ride_url(ride), headers: JWTHelpers.auth_headers(valid_headers, create(:user)), as: :json
+          }.to change(Ride, :count).by(0)
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context "logged out" do
+      it "does not destroy the requested ride" do
+        ride
+        expect {
+          delete ride_url(ride), headers: valid_headers, as: :json
+        }.to change(Ride, :count).by(0)
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 end
