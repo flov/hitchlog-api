@@ -39,7 +39,10 @@ RSpec.describe "/rides", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        {experience: 'bad'}
+        {
+          experience: 'bad',
+          tag_list: 'first tag, second tag'
+        }
       }
 
       it "updates the requested ride" do
@@ -47,6 +50,7 @@ RSpec.describe "/rides", type: :request do
           params: {ride: new_attributes}, headers: auth_headers, as: :json
         ride.reload
         expect(ride.experience).to eq('bad')
+        expect(ride.tag_list).to eq(['first tag', 'second tag'])
       end
 
       it "renders a JSON response with the ride" do
