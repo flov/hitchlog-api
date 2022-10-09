@@ -44,6 +44,7 @@ RSpec.describe "/trips", type: :request do
       "Content-Type" => "application/json"
     }
   }
+  let(:trip) { create(:trip, user: user) }
   let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
 
   describe "GET /index" do
@@ -125,43 +126,45 @@ RSpec.describe "/trips", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {}
+      let(:new_attributes) {{ travelling_with: 2 }}
 
-      xit "updates the requested trip" do
-        trip = Trip.create! valid_attributes
+      it "updates the requested trip" do
+        trip
         patch trip_url(trip),
           params: {trip: new_attributes}, headers: auth_headers, as: :json
         trip.reload
-        skip("Add assertions for updated state")
+        expect(trip.travelling_with).to eq(2)
       end
 
-      xit "renders a JSON response with the trip" do
-        trip = Trip.create! valid_attributes
+      it "renders a JSON response with the trip" do
+        trip
         patch trip_url(trip),
           params: {trip: new_attributes}, headers: auth_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-
-    context "with invalid parameters" do
-      xit "renders a JSON response with errors for the trip" do
-        trip = Trip.create! valid_attributes
-        patch trip_url(trip),
-          params: {trip: invalid_attributes}, headers: auth_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        expect(response.body).to include("2")
       end
     end
   end
 
   describe "DELETE /destroy" do
     context "if logged in" do
-      it "destroys the requested trip" do
-        trip = create(:trip)
-        expect {
-          delete trip_url(trip), headers: auth_headers, as: :json
-        }.to change(Trip, :count).by(-1)
+      context "if owner" do
+        it "destroys the requested trip" do
+          trip
+          expect {
+            delete trip_url(trip), headers: auth_headers, as: :json
+          }.to change(Trip, :count).by(-1)
+        end
+      end
+
+      context "if not owner" do
+        it "does not destroy the requested trip" do
+          trip = create(:trip)
+          expect {
+            delete trip_url(trip), headers: auth_headers, as: :json
+          }.to change(Trip, :count).by(0)
+        end
       end
     end
 
