@@ -42,7 +42,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     it "paginates users" do
-      26.times { create(:user) }
+      25.times { create(:user) }
       get users_url({page: 2}), as: :json
       expect(JSON.parse(response.body)["users"].size).to eq(1)
     end
