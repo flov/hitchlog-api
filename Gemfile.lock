@@ -74,6 +74,8 @@ GEM
     benchmark (0.2.0)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
+    bugsnag (6.24.2)
+      concurrent-ruby (~> 1.0)
     builder (3.2.4)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
@@ -307,6 +309,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 9.0)
   bcrypt (~> 3.1.7)
   bootsnap
+  bugsnag
   debug
   devise
   devise-jwt (~> 0.10.0)
