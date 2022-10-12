@@ -6,7 +6,12 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(_resource, _opts = {})
     render json: {
       message: "Signed in successfully",
-      user: current_user
+      user: {
+        id: current_user.id,
+        email: current_user.email,
+        username: current_user.username,
+        md5_email: current_user.md5_email,
+      }
     }, status: :ok
   end
 
