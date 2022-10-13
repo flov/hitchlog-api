@@ -18,6 +18,9 @@ gem "devise"
 gem "kaminari"
 gem "acts-as-taggable-on", "~> 9.0"
 gem "bugsnag"
+gem "carrierwave", "~> 2.0"
+gem "fog-aws"
+gem "rmagick"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

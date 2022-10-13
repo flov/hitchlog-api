@@ -1,13 +1,10 @@
 module Countries
   def self.[](key)
-    unless @countries
-      @countries = YAML.load(File.open("#{Rails.root}/config/countries.yml"))
-    end
+    @countries ||= YAML.load(File.open("#{Rails.root}/config/countries.yml"))
     @countries[key]
   end
 
-  def self.[]=(key,value)
+  def self.[]=(key, value)
     @countries[key.to_sym] = value
   end
 end
-

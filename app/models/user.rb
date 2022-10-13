@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   def hitchhiked_countries
     hash = {}
-    self.trips.includes(:country_distances).map(&:country_distances).flatten.each do |cd|
+    trips.includes(:country_distances).map(&:country_distances).flatten.each do |cd|
       if hash[cd.country_code]
         hash[cd.country_code] += cd.distance
       else
@@ -77,8 +77,8 @@ class User < ApplicationRecord
   end
 
   def to_geomap
-    hash = {"distances"=>{},"trip_count"=>{}}
-    self.trips.flat_map(&:country_distances).each do |cd|
+    hash = {"distances" => {}, "trip_count" => {}}
+    trips.flat_map(&:country_distances).each do |cd|
       if hash["distances"][Countries[cd.country]]
         hash["distances"][Countries[cd.country]] += cd.distance / 1000
         hash["trip_count"][Countries[cd.country]] += 1
@@ -89,7 +89,7 @@ class User < ApplicationRecord
     end
     hash
   end
-  
+
   def age_of_trips
     return unless date_of_birth
 

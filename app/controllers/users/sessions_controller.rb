@@ -10,7 +10,7 @@ class Users::SessionsController < Devise::SessionsController
         id: current_user.id,
         email: current_user.email,
         username: current_user.username,
-        md5_email: current_user.md5_email,
+        md5_email: current_user.md5_email
       }
     }, status: :ok
   end

@@ -7,7 +7,6 @@ RSpec.describe "Authentications", type: :request do
         user = create(:user)
         post "/users/sign_in", params: {user: {email: user.email, password: user.password}}
         expect(response).to have_http_status(200)
-        expect(response.body).to include("token")
         expect(response.headers).to include("Set-Cookie")
       end
     end

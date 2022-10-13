@@ -90,7 +90,7 @@ class DataPresenter
     end
     Ride::VEHICLES.each do |vehicle|
       hash["#{vehicle}_ratio"] = {} if hash["#{vehicle}_ratio}"].nil?
-      hash[vehicle].keys.each do |country_code|
+      hash[vehicle]&.keys&.each do |country_code|
         hash["#{vehicle}_ratio"][country_code] =
           ((hash[vehicle][country_code].to_f / hash["rides_with_vehicle"][country_code]) * 100).round
       end

@@ -1,4 +1,6 @@
 class DataController < ApplicationController
+  before_action :assign_data_presenter
+
   def country_map
     @data = @data_presenter.trip_data_for_map
   end
