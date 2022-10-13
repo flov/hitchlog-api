@@ -4,7 +4,6 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     passwords: "users/passwords"
   }
-  get "/members", to: "members#show"
   resources :rides
   resources :users do
     member do
@@ -16,5 +15,8 @@ Rails.application.routes.draw do
     end
   end
   resources :trips
-  post "auth/login", to: "authentication#login"
+
+  get "data/country_map", to: "data#country_map"
+  get "data/trips_count", to: "data#trips_count"
+  get "data/written_stories", to: "data#written_stories"
 end

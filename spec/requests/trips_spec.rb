@@ -5,36 +5,37 @@ RSpec.describe "/trips", type: :request do
     {trip: {
       country_distances: [
         {
-            "country": "Ethiopia",
-            "country_code": "ET",
-            "distance": 686342
+          country: "Ethiopia",
+          country_code: "ET",
+          distance: 686342
         },
         {
-            "country": "Somalia",
-            "country_code": "SO",
-            "distance": 354525
+          country: "Somalia",
+          country_code: "SO",
+          distance: 354525
         }
       ],
       origin: {place_id: "ChIJAVkDPzdOqEcRcDteW0YgIQQ",
-                     lat: 52.52000659999999,
-                     lng: 13.404954,
-                     city: "Berlin",
-                     country: "Germany",
-                     name: "Berlin, Germany",
-                     country_code: "DE"},
-            destination: {place_id: "ChIJuRMYfoNhsUcRoDrWe_I9JgQ",
-                          lat: 53.5510846,
-                          lng: 9.9936818,
-                          city: "Hamburg",
-                          country: "Germany",
-                          country_code: "DE",
-                          name: "Hamburg, Germany"},
-            travelling_with: "0",
-            number_of_rides: 2,
-            arrival: "2000-12-12T17:12",
-            departure: "2000-12-12T12:00",
-            distance: 288691,
-            google_duration: 11806}}
+               lat: 52.52000659999999,
+               lng: 13.404954,
+               city: "Berlin",
+               country: "Germany",
+               name: "Berlin, Germany",
+               country_code: "DE"},
+      destination: {place_id: "ChIJuRMYfoNhsUcRoDrWe_I9JgQ",
+                    lat: 53.5510846,
+                    lng: 9.9936818,
+                    city: "Hamburg",
+                    country: "Germany",
+                    country_code: "DE",
+                    name: "Hamburg, Germany"},
+      travelling_with: "0",
+      number_of_rides: 2,
+      arrival: "2000-12-12T17:12",
+      departure: "2000-12-12T12:00",
+      distance: 288691,
+      google_duration: 11806
+    }}
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
   let(:user) { create(:user) }
@@ -126,7 +127,7 @@ RSpec.describe "/trips", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {{ travelling_with: 2 }}
+      let(:new_attributes) { {travelling_with: 2} }
 
       it "updates the requested trip" do
         trip
