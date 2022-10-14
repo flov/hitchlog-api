@@ -47,40 +47,6 @@ RSpec.describe Trip, type: :model do
     end
   end
 
-  describe "#overall_experience" do
-    context "has only good experiences" do
-      it "returns a good experience" do
-        trip.rides << FactoryBot.create(:ride, experience: "good")
-        expect(trip.overall_experience).to eq("good")
-      end
-    end
-
-    context "has a neutral experience" do
-      it "returns a neutral experience" do
-        trip.rides << FactoryBot.build_stubbed(:ride, experience: "good")
-        trip.rides << FactoryBot.build_stubbed(:ride, experience: "neutral")
-        expect(trip.overall_experience).to eq("neutral")
-      end
-    end
-
-    context "has a bad experience" do
-      it "returns a bad experience" do
-        trip.rides << FactoryBot.build(:ride, experience: "good")
-        trip.rides << FactoryBot.build(:ride, experience: "neutral")
-        trip.rides << FactoryBot.build(:ride, experience: "bad")
-        expect(trip.overall_experience).to eq("bad")
-      end
-    end
-
-    context "has a bad and a very good experience" do
-      it "returns a bad experience" do
-        trip.rides << FactoryBot.build(:ride, experience: "very good")
-        trip.rides << FactoryBot.build(:ride, experience: "bad")
-        expect(trip.overall_experience).to eq("bad")
-      end
-    end
-  end
-
   describe "add_ride" do
     it "adds a ride to the trip" do
       trip.save
@@ -102,16 +68,7 @@ RSpec.describe Trip, type: :model do
     it "returns the average speed" do
       trip.distance = 5000 # meters
       allow(trip).to receive_messages(duration: 1.hour.to_i)
-      expect(trip.average_speed).to eq("5 kmh")
-    end
-  end
-
-  describe "countries=" do
-    it "converts the string to an array and sets the country distances" do
-      trip.countries = '[["Netherlands",116566],["Belgium",86072]]'
-      expect(trip.country_distances.size).to eq(2)
-      expect(trip.country_distances.first.distance).to eq(116566)
-      expect(trip.country_distances.last.distance).to eq(86072)
+      expect(trip.average_speed).to eq("5 km/h")
     end
   end
 end

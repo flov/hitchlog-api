@@ -138,6 +138,18 @@ class User < ApplicationRecord
     hash
   end
 
+  def genders
+    self.rides.map(&:gender).reject(&:blank?)
+  end
+
+  def genders_in_percentage
+    hash = {}
+    self.genders.uniq.each do |gender|
+      hash[gender] = ( self.genders.select{|gen| gen == gender}.size.to_f / self.genders.size ).round(2)
+    end
+    hash
+  end
+
   private
 
   # Whitelist the User model attributes for sorting, except +password_digest+.
