@@ -21,6 +21,7 @@ gem "bugsnag"
 gem "carrierwave", "~> 2.0"
 gem "fog-aws"
 gem "rmagick"
+gem "devise-jwt", "~> 0.10.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -43,5 +44,3 @@ group :development do
   gem "solargraph"
   gem "hirb"
 end
-
-gem "devise-jwt", "~> 0.10.0"
