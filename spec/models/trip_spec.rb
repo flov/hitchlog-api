@@ -4,7 +4,6 @@ RSpec.describe Trip, type: :model do
   let(:trip) { FactoryBot.build(:trip) }
 
   describe "#valid?" do
-
     describe "#number_of_rides" do
       it "creates 1 ride on trip if number_of_rides equals 1" do
         user = FactoryBot.create(:user)

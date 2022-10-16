@@ -79,6 +79,9 @@ GEM
     bugsnag (6.24.2)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
+    bullet (7.0.3)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     carrierwave (2.2.2)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -327,6 +330,7 @@ GEM
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.2.0)
+    uniform_notifier (1.16.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     warden-jwt_auth (0.7.0)
@@ -350,6 +354,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
   bugsnag
+  bullet
   carrierwave (~> 2.0)
   debug
   devise

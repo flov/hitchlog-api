@@ -1,6 +1,6 @@
 class Trip < ApplicationRecord
   include AccurateDistanceOfTimeInWordsHelper
-  
+
   has_many :rides, dependent: :destroy
   has_many :country_distances, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -61,8 +61,8 @@ class Trip < ApplicationRecord
   end
 
   def add_ride
-    self.rides.build(number: self.rides.size + 1)
-    self.save
+    rides.build(number: rides.size + 1)
+    save
   end
 
   def duration

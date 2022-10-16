@@ -53,7 +53,7 @@ RSpec.describe "/trips", type: :request do
       it "sorts by lat/lng bounds" do
         create(:trip, from_lat: 42.5, from_lng: 12.5)
         create(:trip, from_lat: 41, from_lng: 12.5)
-        get '/trips?q=%7B%22from_lat_lt%22%3A43%2C%22from_lat_gt%22%3A42%2C%22from_lng_gt%22%3A12%2C%22from_lng_lt%22%3A13%7D', as: :json
+        get "/trips?q=%7B%22from_lat_lt%22%3A43%2C%22from_lat_gt%22%3A42%2C%22from_lng_gt%22%3A12%2C%22from_lng_lt%22%3A13%7D", as: :json
         expect(response.body).to include("42.5")
         expect(response.body).not_to include("41.0")
       end

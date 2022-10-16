@@ -34,7 +34,7 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
-  describe 'GET /profile' do
+  describe "GET /profile" do
     it "renders a JSON response with the user" do
       get profile_user_url(user), headers: headers, as: :json
       expect(response).to be_successful

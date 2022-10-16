@@ -92,6 +92,6 @@ class TripsController < ApplicationController
   end
 
   def search_params
-    params.permit( :from_lat_gt, :from_lat_lt, :from_lng_gt, :from_lng_lt)
+    params.permit(:from_lat_gt, :from_lat_lt, :from_lng_gt, :from_lng_lt)
   end
 end
