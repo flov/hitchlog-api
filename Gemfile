@@ -33,6 +33,10 @@ group :development, :test do
   gem "spring-commands-rspec"
 end
 
+group :test do
+  gem 'simplecov', require: false
+end
+
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   gem "spring"

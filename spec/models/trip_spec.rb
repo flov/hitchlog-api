@@ -4,16 +4,11 @@ RSpec.describe Trip, type: :model do
   let(:trip) { FactoryBot.build(:trip) }
 
   describe "#valid?" do
-    it { is_expected.to validate_presence_of(:from) }
-    it { is_expected.to validate_presence_of(:to) }
-    it { is_expected.to validate_presence_of(:departure) }
-    it { is_expected.to validate_presence_of(:arrival) }
-    it { is_expected.to validate_presence_of(:travelling_with) }
 
-    describe "#no_of_rides" do
-      it "creates 1 ride on trip if no_of_rides equals 1" do
+    describe "#number_of_rides" do
+      it "creates 1 ride on trip if number_of_rides equals 1" do
         user = FactoryBot.create(:user)
-        trip = FactoryBot.create(:trip, no_of_rides: 1, user_id: user.id)
+        trip = FactoryBot.create(:trip, number_of_rides: 1, user_id: user.id)
         expect(trip.rides.size).to eq(1)
       end
     end

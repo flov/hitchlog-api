@@ -3,10 +3,6 @@ require "rails_helper"
 RSpec.describe User, type: :model do
   let(:user) { FactoryBot.build(:user) }
 
-  it { is_expected.to have_many(:trips) }
-  it { is_expected.to have_many(:comments) }
-  it { is_expected.to have_many(:future_trips) }
-
   describe "valid?" do
     describe "#username" do
       it 'allows all these letters: /A-Za-z\d_-/' do
