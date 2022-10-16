@@ -7,9 +7,9 @@ class TripsController < ApplicationController
     @page = params[:page] || 1
     @trips = if params[:q].present?
       @search = Trip.includes(:rides).ransack(JSON.parse(params[:q]))
-      @trips = @search.result(distinct: true).order(created_at: :desc).page(@page)
+      @trips = @search.result(distinct: true).order(created_at: :desc).page(@page).per(12)
     else
-      Trip.order(id: :desc).page(@page)
+      Trip.order(id: :desc).page(@page).per(12)
     end
   end
 
@@ -92,6 +92,6 @@ class TripsController < ApplicationController
   end
 
   def search_params
-    params.permit(:south_lat, :north_lat, :east_lng, :west_lng)
+    params.permit( :from_lat_gt, :from_lat_lt, :from_lng_gt, :from_lng_lt)
   end
 end
