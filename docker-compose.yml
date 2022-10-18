@@ -14,10 +14,6 @@ services:
     depends_on:
       - db
     environment:
-      - GOOGLE_MAPS=AIzaSyD3jCmxfmJm9Mm-XS9zSGZ-4eGAh-vqDs0
-      - SMTP_PASSWORD=e68fe3db9c100b6b246961810fcd1500
-      - SMTP_ADDRESS=send.smtp.mailtrap.io
-      - SMTP_DOMAIN=send.smtp.mailtrap.io
       - SMTP_PORT=2525
       - FRONTEND=http://localhost:3000
       - DB_USERNAME=postgres

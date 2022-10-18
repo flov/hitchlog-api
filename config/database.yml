@@ -16,5 +16,8 @@ test:
 production:
   <<: *default
   database: hitchlog_api_production
-  username: hitchlog_api
-  password: <%= ENV["HITCHLOG_API_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  encoding: unicode
+  host: db
+  username: postgres
+  password: <%= ENV["DB_PASSWORD"] %>
