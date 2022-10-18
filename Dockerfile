@@ -46,7 +46,7 @@ RUN mkdir -p tmp/pids
 
 FROM base as build_deps
 
-ARG BUILD_PACKAGES="git build-essential libpq-dev wget vim curl gzip xz-utils libmagickwand-dev"
+ARG BUILD_PACKAGES="git build-essential libpq-dev wget vim curl gzip xz-utils libmagickwand-dev pkg-config"
 ENV BUILD_PACKAGES ${BUILD_PACKAGES}
 
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
@@ -111,6 +111,6 @@ ENV SECRET_KEY_BASE 1
 
 # Default server start instructions.  Generally Overridden by fly.toml.
 ENV PORT 8080
-ARG SERVER_COMMAND="bin/rails fly:server"
+ARG SERVER_COMMAND="bin/rails s"
 ENV SERVER_COMMAND ${SERVER_COMMAND}
 CMD ${SERVER_COMMAND}
