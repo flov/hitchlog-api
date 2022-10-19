@@ -7,11 +7,10 @@ processes = []
 
 [build]
   [build.args]
-    BUILD_COMMAND = "bin/rails fly:build"
-    SERVER_COMMAND = "bin/rails fly:server"
+    SERVER_COMMAND = "bin/rails s"
 
 [deploy]
-  release_command = "bin/rails fly:release"
+  release_command = "bin/rake db:migrate"
 
 [env]
   PORT = "8080"
