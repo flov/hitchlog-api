@@ -66,23 +66,6 @@ RSpec.describe "/trips", type: :request do
     end
   end
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new Trip" do
-        expect {
-          post trips_url, params: valid_attributes, headers: auth_headers, as: :json
-        }.to change(Trip, :count).by(1)
-        expect(response).to have_http_status(:created)
-      end
-
-      it "renders a JSON with country distances inside the trip" do
-        post trips_url, params: valid_attributes, headers: auth_headers, as: :json
-        expect(response.body).to include("Ethiopia")
-        expect(response.body).to include("Somalia")
-      end
-    end
-  end
-
   describe "GET /show" do
     it "renders a successful response" do
       trip = create(:trip)
@@ -98,6 +81,9 @@ RSpec.describe "/trips", type: :request do
           post trips_url,
             params: valid_attributes, headers: auth_headers, as: :json
         }.to change(Trip, :count).by(1)
+        expect(response).to have_http_status(:created)
+        expect(Trip.last.rides.count).to eq(2)
+        expect(Trip.last.rides.first.number).to eq(1)
       end
 
       it "renders a JSON response with the new trip" do
@@ -105,6 +91,8 @@ RSpec.describe "/trips", type: :request do
           params: valid_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
+        expect(response.body).to include("Ethiopia")
+        expect(response.body).to include("Somalia")
       end
     end
 

@@ -26,7 +26,9 @@ class Trip < ApplicationRecord
 
   before_create do
     # build as many rides on top of the trip as needed
-    number_of_rides.to_i.times { |i| rides.build }
+    number_of_rides.to_i.times do |i|
+      rides.build(number: i + 1)
+    end
   end
 
   def hitchhiked_kms
