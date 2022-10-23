@@ -1,4 +1,5 @@
 json.id trip.id
+json.to_param trip.to_param
 json.created_at trip.created_at
 json.distance trip.distance
 json.departure trip.departure
@@ -28,7 +29,7 @@ json.origin do
   json.lat trip.from_lat
   json.lng trip.from_lng
   json.place_id trip.from_place_id
-  json.name trip.from
+  json.name trip.from_name
 end
 json.destination do
   json.country_code trip.to_country_code
@@ -37,7 +38,7 @@ json.destination do
   json.lat trip.to_lat
   json.lng trip.to_lng
   json.place_id trip.to_place_id
-  json.name trip.to
+  json.name trip.to_name
 end
 json.rides do
   json.array! trip.rides.order(id: :asc), partial: "rides/ride", as: :ride

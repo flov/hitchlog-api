@@ -31,6 +31,27 @@ class Trip < ApplicationRecord
     end
   end
 
+  def to_param
+    origin = CGI.escape(sanitize_address("from"))
+    destin = CGI.escape(sanitize_address("to"))
+
+    "#{origin}-to-#{destin}-#{id}".parameterize
+  end
+
+  def sanitize_address(direction)
+    if send("#{direction}_city").present?
+      send("#{direction}_city")
+    elsif send("#{direction}_name").present?
+      send("#{direction}_name")
+    elsif send("#{direction}_formatted_address").present?
+      send("#{direction}_formatted_address")
+    elsif send(direction.to_s).present?
+      send(direction.to_s)
+    else
+      ""
+    end
+  end
+
   def hitchhiked_kms
     distance / 1000
   end

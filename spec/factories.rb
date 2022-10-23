@@ -56,15 +56,15 @@ FactoryBot.define do
 
   factory :trip do
     user
-    from { "Tehran" }
-    to { "Shiraz" }
+    from { "berlin" }
+    to { "hamborg" }
     from_city { "Berlin" }
     from_country { "Germany" }
     from_country_code { "DE" }
     from_place_id { "ChIJAVkDPzdOqEcRcDteW2Kq6zA" }
     from_lat { 52.520008 }
     from_lng { 13.404954 }
-    to_city { "Berlin" }
+    to_city { "Hamburg" }
     to_country { "Germany" }
     to_country_code { "DE" }
     to_place_id { "ChIJAVkDPzdOqEcRcDteW2Kq6zA" }
