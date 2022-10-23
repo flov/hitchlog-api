@@ -30,6 +30,7 @@ json.origin do
   json.lng trip.from_lng
   json.place_id trip.from_place_id
   json.name trip.from_name
+  json.sanitized_address trip.sanitize_address("from")
 end
 json.destination do
   json.country_code trip.to_country_code
@@ -39,6 +40,7 @@ json.destination do
   json.lng trip.to_lng
   json.place_id trip.to_place_id
   json.name trip.to_name
+  json.sanitized_address trip.sanitize_address("to")
 end
 json.rides do
   json.array! trip.rides.order(id: :asc), partial: "rides/ride", as: :ride
