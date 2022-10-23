@@ -2,40 +2,38 @@ require "rails_helper"
 
 RSpec.describe "/trips", type: :request do
   let(:valid_attributes) {
-    {trip: {
-      country_distances: [
-        {
-          country: "Ethiopia",
-          country_code: "ET",
-          distance: 686342
-        },
-        {
-          country: "Somalia",
-          country_code: "SO",
-          distance: 354525
-        }
-      ],
-      origin: {place_id: "ChIJAVkDPzdOqEcRcDteW0YgIQQ",
-               lat: 52.52000659999999,
-               lng: 13.404954,
-               city: "Berlin",
-               country: "Germany",
-               name: "Berlin, Germany",
-               country_code: "DE"},
-      destination: {place_id: "ChIJuRMYfoNhsUcRoDrWe_I9JgQ",
-                    lat: 53.5510846,
-                    lng: 9.9936818,
-                    city: "Hamburg",
-                    country: "Germany",
-                    country_code: "DE",
-                    name: "Hamburg, Germany"},
-      travelling_with: "0",
-      number_of_rides: 2,
-      arrival: "2000-12-12T17:12",
-      departure: "2000-12-12T12:00",
-      distance: 288691,
-      google_duration: 11806
-    }}
+    {"trip" =>
+      {"origin" =>
+        {"place_id" => "ChIJtQc1pJmfagwRATBZlraFkIo",
+         "lat" => 28.0467575,
+         "lng" => -16.5725303,
+         "city" => "",
+         "country" => "Spain",
+         "country_code" => "ES",
+         "formatted_address" =>
+          "38610, Santa Cruz de Tenerife, Spain"},
+       "destination" =>
+        {"place_id" => "ChIJeY5GfiyYagwRkkcCvPRAAyY",
+         "lat" => 28.0489062,
+         "lng" => -16.7115979,
+         "city" => "Los Cristianos",
+         "country" => "Spain",
+         "country_code" => "ES",
+         "formatted_address" =>
+          "38650 Los Cristianos, Santa Cruz de Tenerife, Spain"},
+       "country_distances" =>
+        [{"country" => "Spain",
+          "country_code" => "ES",
+          "distance" => 15861}],
+       "from_name" => "teneirfe airport",
+       "to_name" => "los christianos",
+       "travelling_with" => "0",
+       "number_of_rides" => 1,
+       "arrival" => "1999-12-12T17:12",
+       "departure" => "1999-12-12T12:00",
+       "totalDistance" => 15861,
+       "googleDuration" => 743,
+       "photo" => ""}}
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
   let(:user) { create(:user) }
@@ -82,17 +80,16 @@ RSpec.describe "/trips", type: :request do
             params: valid_attributes, headers: auth_headers, as: :json
         }.to change(Trip, :count).by(1)
         expect(response).to have_http_status(:created)
-        expect(Trip.last.rides.count).to eq(2)
+        expect(Trip.last.rides.count).to eq(1)
         expect(Trip.last.rides.first.number).to eq(1)
       end
 
       it "renders a JSON response with the new trip" do
-        post trips_url,
-          params: valid_attributes, headers: auth_headers, as: :json
+        post trips_url, params: valid_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
-        expect(response.body).to include("Ethiopia")
-        expect(response.body).to include("Somalia")
+        expect(JSON.parse(response.body)["origin"]["name"]).to eq("teneirfe airport")
+        expect(Trip.last.from).to eq("teneirfe airport")
       end
     end
 

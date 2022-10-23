@@ -71,6 +71,8 @@ class TripsController < ApplicationController
   def trip_params
     params.require(:trip).permit(
       :number_of_rides,
+      :from_name,
+      :to_name,
       :arrival,
       :departure,
       :google_duration,
@@ -83,15 +85,21 @@ class TripsController < ApplicationController
     params.permit(trip: [country_distances: [:country, :country_code, :distance]])
   end
 
+  def location
+    [:formatted_address, :place_id, :lat, :lng, :city, :country, :name, :country_code]
+  end
+
   def origin_params
     params.require(:trip).permit(
-      origin: [:place_id, :lat, :lng, :city, :country, :name, :country_code]
+      :from_name,
+      origin: location
     )
   end
 
   def destination_params
     params.require(:trip).permit(
-      destination: [:place_id, :lat, :lng, :city, :country, :name, :country_code]
+      :to_name,
+      destination: location
     )
   end
 
