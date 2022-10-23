@@ -47,7 +47,7 @@ RSpec.describe "/rides", type: :request do
 
       it "updates the requested ride" do
         patch ride_url(ride),
-          params: {ride: new_attributes}, headers: auth_headers, as: :json
+          params: new_attributes, headers: auth_headers, as: :json
         ride.reload
         expect(ride.experience).to eq("bad")
         expect(ride.tag_list).to eq(["first tag", "second tag"])
@@ -55,7 +55,7 @@ RSpec.describe "/rides", type: :request do
 
       it "renders a JSON response with the ride" do
         patch ride_url(ride),
-          params: {ride: new_attributes}, headers: auth_headers, as: :json
+          params: new_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -64,7 +64,7 @@ RSpec.describe "/rides", type: :request do
     context "with invalid parameters" do
       it "renders a JSON response with errors for the ride" do
         patch ride_url(ride),
-          params: {ride: invalid_attributes}, headers: auth_headers, as: :json
+          params: invalid_attributes, headers: auth_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end

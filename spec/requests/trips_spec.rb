@@ -89,7 +89,7 @@ RSpec.describe "/trips", type: :request do
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(JSON.parse(response.body)["origin"]["name"]).to eq("teneirfe airport")
-        expect(Trip.last.from).to eq("teneirfe airport")
+        expect(Trip.last.from_name).to eq("teneirfe airport")
       end
     end
 
