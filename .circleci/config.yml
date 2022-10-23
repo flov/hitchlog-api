@@ -11,20 +11,29 @@ orbs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
+    working_directory: ~/app
     docker:
-      - image: cimg/ruby:3.1.0
+      - image: cimg/ruby:3.1.2
+        environment: 
+          RAILS_ENV: test
+          DB_PASSWORD: password
+          DB_USER: hitchlog_api
+      - image: postgres:14.5
+        environment:
+          POSTGRES_USER: hitchlog_api
+          POSTGRES_DB: hitchlog_api_test
+          POSTGRES_PASSWORD: password
+
     executor: ruby/default
     steps:
       - checkout
-      - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-workflows:
-  main: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    jobs:
-      - build
+      - run: gem install bundler -v=2.3.20
+      - run: bundle install --path vendor/bundle
+      # Wait for DB
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # Setup the environment
+      - run: cp .sample.env .env
+      # Setup the database
+      - run: bundle exec rake db:setup
+      # Run the tests
+      - run: bundle exec rake

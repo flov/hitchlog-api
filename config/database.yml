@@ -12,6 +12,8 @@ development:
 test:
   <<: *default
   database: hitchlog_api_test
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
 
 production:
   <<: *default
