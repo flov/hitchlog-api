@@ -26,6 +26,8 @@ jobs:
 
     executor: ruby/default
     steps:
+      # needs imagemagick to install gem 'rmagick'
+      - run: apt-get install --no-install-recommends -y imagemagick libmagickwand-dev
       - checkout
       - run: gem install bundler -v=2.3.20
       - run: bundle install --path vendor/bundle
