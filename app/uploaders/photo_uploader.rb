@@ -32,6 +32,6 @@ class PhotoUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    "hitchhiking-from-#{model.trip.sanitize_address('from')}-to-#{model.trip.sanitize_address('to')}-#{model.id}-#{File.extname(super)}" if original_filename
+    "hitchhiking-from-#{model.trip.sanitize_address('from')}-to-#{model.trip.sanitize_address('to')}-#{model.id}#{File.extname(super)}" if original_filename
   end
 end
