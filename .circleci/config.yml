@@ -27,10 +27,10 @@ jobs:
     executor: ruby/default
     steps:
       # needs imagemagick to install gem 'rmagick'
-      - run: apt-get install --no-install-recommends -y imagemagick libmagickwand-dev
       - checkout
+      - run: sudo apt-get install --no-install-recommends -y imagemagick libmagickwand-dev
       - run: gem install bundler -v=2.3.20
-      - run: bundle install --path vendor/bundle
+      - run: bundle install --path vendor/bundl
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Setup the environment
