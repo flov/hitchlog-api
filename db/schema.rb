@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_02_125525) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_26_141245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -219,6 +219,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_125525) do
     t.index ["from_lng"], name: "index_trips_on_from_lng"
     t.index ["to_country"], name: "index_trips_on_to_country"
     t.index ["travelling_with"], name: "index_trips_on_travelling_with"
+    t.index ["user_id"], name: "index_trips_on_user_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
