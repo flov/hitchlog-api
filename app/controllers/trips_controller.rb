@@ -11,7 +11,11 @@ class TripsController < ApplicationController
         :user,
         :country_distances
       ).ransack(JSON.parse(params[:q]))
-      @trips = @search.result(distinct: true).order(created_at: :desc).page(@page).per(12)
+      @trips = @search.
+        result(distinct: true).
+        order(created_at: :desc).
+        page(@page).
+        per(12)
     else
       Trip.order(id: :desc).page(@page).per(12)
     end

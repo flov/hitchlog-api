@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-    :recoverable,
+    :recoverable, :confirmable,
     :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   GENDERS = ["male", "female", "non-binary"].freeze
@@ -148,6 +148,23 @@ class User < ApplicationRecord
       hash[gender] = (genders.count { |gen| gen == gender }.to_f / genders.size).round(2)
     end
     hash
+  end
+
+  def self.confirm_by_token(confirmation_token)
+    if confirmation_token.blank?
+      user = self.new
+      user.errors.add(:confirmation_token, :blank)
+      return user
+    end
+    user = User.find_by(confirmation_token: confirmation_token)
+    if user
+      user.confirm
+      user
+    else
+      user = self.new
+      self.errors.add(:confirmation_token, :invalid)
+      return user
+    end
   end
 
   private

@@ -13,7 +13,7 @@ RSpec.describe "/rides", type: :request do
       }
     }
   }
-  let(:user) { create(:user) }
+  let(:user) { create(:confirmed_user) }
   let(:trip) { create(:trip, user: user) }
   let(:ride) { create(:ride, trip: trip) }
   let(:valid_headers) {
@@ -86,7 +86,7 @@ RSpec.describe "/rides", type: :request do
         it "does not destroy the requested ride" do
           ride
           expect {
-            delete ride_url(ride), headers: JWTHelpers.auth_headers(valid_headers, create(:user)), as: :json
+            delete ride_url(ride), headers: JWTHelpers.auth_headers(valid_headers, create(:confirmed_user)), as: :json
           }.to change(Ride, :count).by(0)
           expect(response).to have_http_status(:forbidden)
         end

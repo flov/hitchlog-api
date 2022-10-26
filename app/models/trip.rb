@@ -35,7 +35,7 @@ class Trip < ApplicationRecord
     origin = CGI.escape(sanitize_address("from"))
     destin = CGI.escape(sanitize_address("to"))
 
-    "#{origin}-to-#{destin}-#{id}".parameterize
+    "hitchhiking-trip-from-#{origin}-to-#{destin}-#{id}".parameterize
   end
 
   def sanitize_address(direction)

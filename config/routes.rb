@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: "users/sessions",
     registrations: "users/registrations",
-    passwords: "users/passwords"
+    passwords: "users/passwords",
   }
   resources :rides
   resources :users do
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get "geomap"
     end
     collection do
+      post "confirm"
       get "me"
     end
   end

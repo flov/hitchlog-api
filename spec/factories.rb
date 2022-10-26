@@ -24,6 +24,10 @@ FactoryBot.define do
     date_of_birth { 23.years.ago }
     gender { Faker::Gender.binary_type }
     about_you { Faker::Fantasy::Tolkien.poem }
+    factory :confirmed_user do
+      confirmed_at { Time.now }
+    end
+    
   end
 
   factory :comment do

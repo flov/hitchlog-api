@@ -42,7 +42,7 @@ RSpec.describe Trip, type: :model do
   describe "#valid?" do
     describe "#number_of_rides" do
       it "creates 1 ride on trip if number_of_rides equals 1" do
-        user = FactoryBot.create(:user)
+        user = FactoryBot.create(:confirmed_user)
         trip = FactoryBot.create(:trip, number_of_rides: 1, user_id: user.id)
         expect(trip.rides.size).to eq(1)
       end

@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
   let(:invalid_attributes) { {blabla: "yoo"} }
-  let(:user) { create(:user) }
+  let(:user) { create(:confirmed_user) }
+  let(:unconfirmed_user) { create(:user) }
   let(:headers) {
     {
       "Accept" => "application/json",
@@ -43,15 +44,45 @@ RSpec.describe UsersController, type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      create(:user)
+      user
       get users_url, as: :json
       expect(response).to be_successful
     end
 
-    it "paginates users" do
-      25.times { create(:user) }
+    it "does not list users without trips" do
+      user
+      get users_url, as: :json
+      expect(response).to be_successful
+      expect(JSON.parse(response.body)["users"].size).to eq(0)
+    end
+
+    it "paginates users for users with trips" do
+      25.times do
+        u = create(:confirmed_user)
+        u.trips << create(:trip)
+      end
       get users_url({page: 2}), as: :json
       expect(JSON.parse(response.body)["users"].size).to eq(1)
+    end
+  end
+
+  describe "POST /confirm" do
+    it "renders an error when token is not present" do
+      post confirm_users_url(user), as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "renders an error when token is invalid" do
+      post confirm_users_url(user, "invalid")
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "renders a successful response when token is valid" do
+      unconfirmed_user
+      post confirm_users_url,
+        params: {confirmation_token: unconfirmed_user.confirmation_token },
+        as: :json
+      expect(response).to be_successful
     end
   end
 

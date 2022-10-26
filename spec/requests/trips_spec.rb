@@ -36,7 +36,7 @@ RSpec.describe "/trips", type: :request do
        "photo" => ""}}
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
-  let(:user) { create(:user) }
+  let(:user) { create(:confirmed_user) }
   let(:headers) {
     {
       "Accept" => "application/json",
@@ -76,8 +76,7 @@ RSpec.describe "/trips", type: :request do
     context "with valid parameters" do
       it "creates a new Trip" do
         expect {
-          post trips_url,
-            params: valid_attributes, headers: auth_headers, as: :json
+          post trips_url, params: valid_attributes, headers: auth_headers, as: :json
         }.to change(Trip, :count).by(1)
         expect(response).to have_http_status(:created)
         expect(Trip.last.rides.count).to eq(1)

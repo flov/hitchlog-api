@@ -51,6 +51,15 @@ class UsersController < ApplicationController
   def geomap
   end
 
+  def confirm
+    @user = User.confirm_by_token(params[:confirmation_token])
+    if @user && @user.errors.empty?
+      render json: {message: "confirmed"}
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def user_owner?
