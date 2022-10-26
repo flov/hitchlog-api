@@ -24,7 +24,6 @@ gem "rmagick"
 gem "devise-jwt", "~> 0.10.0"
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "dotenv-rails"
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "rspec-rails"
@@ -32,6 +31,7 @@ group :development, :test do
   gem "standard"
   gem "faker"
   gem "spring-commands-rspec"
+  gem "pry"
 end
 
 group :test do
