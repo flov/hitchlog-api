@@ -11,11 +11,11 @@ class TripsController < ApplicationController
         :user,
         :country_distances
       ).ransack(JSON.parse(params[:q]))
-      @trips = @search.
-        result(distinct: true).
-        order(created_at: :desc).
-        page(@page).
-        per(12)
+      @trips = @search
+        .result(distinct: true)
+        .order(created_at: :desc)
+        .page(@page)
+        .per(12)
     else
       Trip.order(id: :desc).page(@page).per(12)
     end
@@ -68,7 +68,7 @@ class TripsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_trip
-    @trip = Trip.find(params[:id].split('-').last)
+    @trip = Trip.find(params[:id].split("-").last)
   end
 
   # Only allow a list of trusted parameters through.

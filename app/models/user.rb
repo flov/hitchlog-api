@@ -152,19 +152,18 @@ class User < ApplicationRecord
 
   def self.confirm_by_token(confirmation_token)
     if confirmation_token.blank?
-      user = self.new
+      user = new
       user.errors.add(:confirmation_token, :blank)
       return user
     end
     user = User.find_by(confirmation_token: confirmation_token)
     if user
       user.confirm
-      user
     else
-      user = self.new
-      self.errors.add(:confirmation_token, :invalid)
-      return user
+      user = new
+      errors.add(:confirmation_token, :invalid)
     end
+    user
   end
 
   private

@@ -80,7 +80,7 @@ RSpec.describe UsersController, type: :request do
     it "renders a successful response when token is valid" do
       unconfirmed_user
       post confirm_users_url,
-        params: {confirmation_token: unconfirmed_user.confirmation_token },
+        params: {confirmation_token: unconfirmed_user.confirmation_token},
         as: :json
       expect(response).to be_successful
     end
