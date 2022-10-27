@@ -12,7 +12,7 @@ RSpec.describe Trip, type: :model do
       it "should output correctly" do
         trip.from_city = "Cologne"
         trip.to_city = "Berlin"
-        expect(trip.to_param).to eq("cologne-to-berlin-123")
+        expect(trip.to_param).to eq("hitchhiking-trip-from-cologne-to-berlin-123")
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe Trip, type: :model do
         trip.to_city = ""
         trip.from_name = "tenerife airport"
         trip.to_name = "los christianos puerto"
-        expect(trip.to_param).to eq("tenerife-airport-to-los-christianos-puerto-123")
+        expect(trip.to_param).to eq("hitchhiking-trip-from-tenerife-airport-to-los-christianos-puerto-123")
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Trip, type: :model do
         trip.to_name = ""
         trip.from_formatted_address = "Muelle de Pescadores, puerto de Los Cristianos., 38650 Arona, Santa Cruz de Tenerife, Spain"
         trip.to_formatted_address = "38610, Santa Cruz de Tenerife, Spain"
-        expect(trip.to_param).to eq("muelle-de-pescadores-2c-puerto-de-los-cristianos-2c-38650-arona-2c-santa-cruz-de-tenerife-2c-spain-to-38610-2c-santa-cruz-de-tenerife-2c-spain-123")
+        expect(trip.to_param).to eq("hitchhiking-trip-from-muelle-de-pescadores-2c-puerto-de-los-cristianos-2c-38650-arona-2c-santa-cruz-de-tenerife-2c-spain-to-38610-2c-santa-cruz-de-tenerife-2c-spain-123")
       end
     end
   end
