@@ -2,6 +2,10 @@
 
 - JWT Authentication with devise-jwt
 
+## Tech stack
+
+![techstack](/public/techstack.png)
+
 ## Install
 
 Edit the content of `.env.example` and copy it over to `.env`
