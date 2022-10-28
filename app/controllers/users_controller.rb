@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: %i[me create update destroy]
+  before_action :authenticate_user!, only: %i[me create update destroy send_message]
   before_action :set_user, only: %i[geomap show update profile destroy]
   before_action :user_owner?, only: %i[update destroy]
 
@@ -48,7 +48,21 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  # GET /users/1/geomap.json
   def geomap
+  end
+
+  # POST /users/1/send_message
+  def send_message
+    @user = User.find_by_username(params[:id])
+    if @user == current_user
+      render json: {error: "you can't send a message to yourself"}, status: :unprocessable_entity
+    elsif @user
+      UserMailer.send_message(current_user, @user, params[:message]).deliver_now
+      render json: {message: "sent"}
+    else
+      render json: {error: "user not found"}, status: :not_found
+    end
   end
 
   def confirm

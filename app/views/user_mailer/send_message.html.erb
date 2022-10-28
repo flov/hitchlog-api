@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <head>
+  <body>
+    <p>Hi, <%= @to_user.username.capitalize %>!</p>
+    <p>
+      You have mail.
+    </p>
+    <p>
+      <%= @from_user.username.capitalize %> has sent you a message:
+    </p>
+    <p>"<%= @message %>"</p>
+    <p>To reply, <%= link_to 'click here', "#{ENV['FRONTEND']}/hitchhikers/#{@to_user.username}/send_message"  %></p>
+  </body>
+  </head>
+</html>
+
+

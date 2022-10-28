@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     member do
       get "profile"
       get "geomap"
+      post "send_message"
     end
     collection do
       post "confirm"

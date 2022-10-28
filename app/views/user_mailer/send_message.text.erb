@@ -1,0 +1,8 @@
+Hi, <%= @to_user.username.capitalize %>!
+
+You have mail.
+<%= @from_user.username.capitalize %> has sent you a message:
+
+"<%= @message %>"
+
+To reply, follow this link: <%= "#{ENV['FRONTEND']}/hitchhikers/#{@to_user.username}/send_message"  %>

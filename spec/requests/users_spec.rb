@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe UsersController, type: :request do
   let(:invalid_attributes) { {blabla: "yoo"} }
   let(:user) { create(:confirmed_user) }
+  let(:another_user) { create(:confirmed_user) }
   let(:unconfirmed_user) { create(:user) }
   let(:headers) {
     {
@@ -30,6 +31,35 @@ RSpec.describe UsersController, type: :request do
     context "logged out" do
       it "returns unauthenticated" do
         get me_users_url, headers: headers, as: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "POST /send_message" do
+    context "signed in" do
+      it "logged in user should not be able to send message to himself" do
+        post send_message_user_url(user.username),
+          headers: auth_headers,
+          params: {message: "hello"},
+          as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "sends a message to another user" do
+        # stub send_message method of UserMailer
+        # allow(UserMailer).to receive(:send_message).and_return(double(deliver_now: true))
+        post send_message_user_url(another_user.username),
+          params: {message: "hello"}.to_json,
+          headers: auth_headers, as: :json
+        expect(response).to be_successful
+        expect(UserMailer.deliveries.count).to eq(1)
+      end
+    end
+
+    context "signed out" do
+      it "returns unauthenticated" do
+        post send_message_user_url(user.username), headers: headers, as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end
