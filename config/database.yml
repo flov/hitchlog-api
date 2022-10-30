@@ -13,8 +13,8 @@ test:
   <<: *default
   database: hitchlog_api_test
   host: localhost
-  username: ENV['DB_USER']
-  password: ENV['DB_PASSWORD']
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
 production:
   <<: *default
