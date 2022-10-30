@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_27_084725) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_29_173211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,11 +85,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_084725) do
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "posts", id: :serial, force: :cascade do |t|
-    t.string "title", limit: 255
-    t.string "body", limit: 255
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+  create_table "post_comments", force: :cascade do |t|
+    t.text "body"
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_comments_on_post_id"
+    t.index ["user_id"], name: "index_post_comments_on_user_id"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.string "tags", array: true
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "summary"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "races", id: :serial, force: :cascade do |t|
@@ -271,4 +285,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_27_084725) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  add_foreign_key "post_comments", "posts"
+  add_foreign_key "post_comments", "users"
+  add_foreign_key "posts", "users"
 end

@@ -60,10 +60,28 @@ class TripsController < ApplicationController
     @trip.destroy
   end
 
+  def create_comment
+    comment = Comment.new(comment_params)
+    comment.trip_id = params[:id]
+    comment.user = current_user
+    if comment.save
+      render json: comment, status: :created
+    else
+      render json: comment.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
+
+  def notify_trip_owner_and_comment_authors(comment)
+    # TODO...
+  end
+
   def trip_owner?
-    render json: {error: "not authorized"}, status: :unauthorized if @trip.user != current_user
+    render json: {
+      error: "not authorized"
+    }, status: :unauthorized if @trip.user != current_user
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -83,6 +101,10 @@ class TripsController < ApplicationController
       :distance,
       :travelling_with
     )
+  end
+
+  def comment_params
+    params.require(:comment).permit(:body)
   end
 
   def country_distances_params

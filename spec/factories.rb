@@ -2,6 +2,18 @@ require "factory_bot"
 require "faker"
 
 FactoryBot.define do
+  factory :post_comment do
+    body { "Comment body" }
+    user
+    post
+  end
+
+  factory :post do
+    title { "MyString" }
+    body { "MyText" }
+    user
+  end
+
   factory :jwt_denylist do
     jti { "MyString" }
     exp { "2022-09-17 18:11:35" }
@@ -18,7 +30,8 @@ FactoryBot.define do
 
   factory :user do
     email { Faker::Internet.email }
-    username { Faker::Internet.username(separators: %w[_]) }
+    name { Faker::Name.name }
+    username { Faker::Internet.username(separators: %w[_]) + rand(1000).to_s }
     password { "password" }
     cs_user { Faker::Internet.username(separators: %w[_]) }
     date_of_birth { 23.years.ago }
@@ -27,7 +40,6 @@ FactoryBot.define do
     factory :confirmed_user do
       confirmed_at { Time.now }
     end
-    
   end
 
   factory :comment do

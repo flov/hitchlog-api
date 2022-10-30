@@ -163,4 +163,26 @@ RSpec.describe "/trips", type: :request do
       end
     end
   end
+
+  describe "POST /create_comment" do
+    context "with valid parameters" do
+      it "creates a new comment" do
+        expect {
+          post create_comment_trip_url(trip.id),
+            params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
+        }.to change(Comment, :count).by(1)
+        expect(response).to have_http_status(:created)
+      end
+    end
+
+    context "with invalid parameters" do
+      it "does not create a new comment and returns 422" do
+        expect {
+          post create_comment_trip_url(trip.id),
+            params: {comment: {body: ""}}, headers: auth_headers, as: :json
+        }.to change(Comment, :count).by(0)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
 end
