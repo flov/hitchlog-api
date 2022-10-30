@@ -6,13 +6,13 @@ class UserMailer < ApplicationMailer
     @url = "http://hitchlog.com/login"
     mail(to: @user.email, subject: "Welcome to Hitchlog")
   end
-  
+
   def send_message(from_user, to_user, message)
     @message, @to_user, @from_user = message, to_user, from_user
-    
+
     mail(
       to: to_user.email,
-      subject: "[Hitchlog] Message from user #{from_user.username.capitalize}",
+      subject: "[Hitchlog] Message from user #{from_user.username.capitalize}"
     )
   end
 end

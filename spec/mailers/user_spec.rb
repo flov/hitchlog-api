@@ -9,7 +9,7 @@ RSpec.describe UserMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("[Hitchlog] Message from user #{current_user.username.capitalize}")
       expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(['noreply@hitchlog.com'])
+      expect(mail.from).to eq(["noreply@hitchlog.com"])
     end
   end
 end

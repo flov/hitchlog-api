@@ -58,7 +58,7 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    @post = Post.find(params[:id].split('-').last)
+    @post = Post.find(params[:id].split("-").last)
   end
 
   def post_comment_params

@@ -73,15 +73,16 @@ class TripsController < ApplicationController
 
   private
 
-
   def notify_trip_owner_and_comment_authors(comment)
     # TODO...
   end
 
   def trip_owner?
-    render json: {
-      error: "not authorized"
-    }, status: :unauthorized if @trip.user != current_user
+    if @trip.user != current_user
+      render json: {
+        error: "not authorized"
+      }, status: :unauthorized
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.

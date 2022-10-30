@@ -1,6 +1,6 @@
 class CreatePosts < ActiveRecord::Migration[7.0]
   def up
-    begin 
+    begin
       drop_table :posts
     rescue ActiveRecord::StatementInvalid
       puts "table posts does not exist, creating it"

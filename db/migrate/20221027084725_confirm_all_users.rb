@@ -4,9 +4,9 @@ class ConfirmAllUsers < ActiveRecord::Migration[7.0]
       if user.confirmed_at.nil?
         user.confirm
         if user.save
-          print '.'
+          print "."
         else
-          print '#'
+          print "#"
         end
       end
     end
