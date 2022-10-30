@@ -18,7 +18,7 @@ test:
 
 production:
   <<: *default
-  database: hitchlog_api_production
+  database: hitchlog_api_production_2
   adapter: postgresql
   encoding: unicode
   host: db
