@@ -19,7 +19,9 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user = current_user
 
-    if @post.save
+    if current_user.id != 1
+      render json: {error: "Unauthorized"}, status: :unauthorized
+    elsif @post.save
       render :show, status: :created, location: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -29,7 +31,9 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    if @post.update(post_params)
+    if current_user.id != 1
+      render json: {error: "Unauthorized"}, status: :unauthorized
+    elsif @post.update(post_params)
       render :show, status: :ok, location: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -66,6 +70,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body)
+    params.require(:post).permit(:title, :body, :summary, :tag)
   end
 end
