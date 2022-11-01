@@ -47,15 +47,15 @@ class PostsController < ApplicationController
   end
 
   def create_comment
-    @comment = PostComment.new(
-      body: params[:comment][:body],
+    @post_comment = PostComment.new(
+      body: params[:post_comment][:body],
       user: current_user,
       post: @post
     )
-    if @comment.save
-      render :show, status: :created, location: @post
+    if @post_comment.save
+      render 'post_comments/show', status: :created
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render json: @post_comment.errors, status: :unprocessable_entity
     end
   end
 

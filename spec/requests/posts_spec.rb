@@ -5,7 +5,7 @@ RSpec.describe "/posts", type: :request do
   let(:user) { FactoryBot.create(:confirmed_user, id: 1) }
   let(:not_admin) { FactoryBot.create(:confirmed_user, id: 2) }
   let(:valid_attributes) {
-    {body: "MyText", title: "MyString"}
+    {body: "example body", title: "example title"}
   }
   let(:invalid_attributes) { {body: ""} }
   let(:headers) { {"Accept" => "application/json", "Content-Type" => "application/json"} }
@@ -38,6 +38,7 @@ RSpec.describe "/posts", type: :request do
               as: :json
           }.to change(Post, :count).by(1)
           expect(response).to have_http_status(:created)
+          expect(respnse.body).to match(/MyText/)
           expect(response.content_type).to match(a_string_including("application/json"))
         end
       end
@@ -118,10 +119,20 @@ RSpec.describe "/posts", type: :request do
         it "creates a new Comment" do
           expect {
             post create_comment_post_url(post_entity.to_param),
-              params: {comment: {body: "MyText"}},
+              params: {post_comment: {body: "comment body"}},
               headers: auth_headers,
               as: :json
           }.to change(PostComment, :count).by(1)
+        end
+
+        it 'renders a JSON response with the new comment' do
+          post create_comment_post_url(post_entity.to_param),
+            params: {post_comment: {body: "comment body"}},
+            headers: auth_headers,
+            as: :json
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to match(a_string_including("application/json"))
+          expect(response.body).to match(/comment body/)
         end
       end
 
@@ -129,7 +140,7 @@ RSpec.describe "/posts", type: :request do
         it "does not create a new Comment" do
           expect {
             post create_comment_post_url(post_entity.to_param),
-              params: {comment: {body: ""}},
+              params: {post_comment: {body: ""}},
               headers: auth_headers,
               as: :json
           }.to change(PostComment, :count).by(0)
@@ -137,7 +148,7 @@ RSpec.describe "/posts", type: :request do
 
         it "renders a JSON response with errors for the new comment" do
           post create_comment_post_url(post_entity.to_param),
-            params: {comment: {body: ""}},
+            params: {post_comment: {body: ""}},
             headers: auth_headers,
             as: :json
           expect(response).to have_http_status(:unprocessable_entity)
@@ -149,7 +160,7 @@ RSpec.describe "/posts", type: :request do
     describe "not logged in" do
       it "renders a 401" do
         post create_comment_post_url(post_entity.to_param),
-          params: {comment: {body: ""}},
+          params: {post_comment: {body: ""}},
           as: :json
         expect(response).to have_http_status(:unauthorized)
       end

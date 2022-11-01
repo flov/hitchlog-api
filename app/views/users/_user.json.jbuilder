@@ -8,6 +8,7 @@ json.languages user.languages
 json.hitchhiked_kms user.hitchhiked_kms
 json.number_of_trips user.trips.size
 json.number_of_rides user.rides.size
+json.number_of_stories user.no_of_stories
 json.created_at user.created_at.strftime("%d %b %Y")
 json.age user.age
 json.cs_user user.cs_user
