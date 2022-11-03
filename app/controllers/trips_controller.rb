@@ -36,6 +36,13 @@ class TripsController < ApplicationController
         .result
         .order(id: :desc)
         .limit(3)
+    elsif params[:videos] == "true"
+      @trips = Trip
+        .includes(:rides)
+        .ransack(rides_youtube_present: true)
+        .result
+        .order(id: :desc)
+        .limit(1)
     else
       @trips = Trip.order(id: :desc).limit(3)
     end
