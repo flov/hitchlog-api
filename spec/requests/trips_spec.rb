@@ -163,6 +163,51 @@ RSpec.describe "/trips", type: :request do
       end
     end
   end
+  
+  describe "GET /latest" do
+    let (:test_photo) {
+      Rack::Test::UploadedFile.new(
+        File.join(Rails.root, "spec", "support", "images", "thumb.png")
+      )
+    }
+    
+    describe "without params" do
+      it "returns the latest three trips" do
+        create(:trip, from_city: "Kiew")
+        create(:trip, from_city: "Berlin")
+        create(:trip, from_city: "Hamburg")
+        create(:trip, from_city: "Munich")
+        get latest_trips_url, headers: auth_headers, as: :json
+        expect(response.body).to_not include("Kiew")
+        expect(response.body).to include("Berlin")
+        expect(response.body).to include("Hamburg")
+        expect(response.body).to include("Munich")
+      end
+    end
+
+    describe "with params[:stories} = true" do
+      it "returns the latest trips with stories" do
+        trip = build(:trip, user: user)
+        trip.rides.build(story: "hello")
+        trip.save
+        get latest_trips_url(stories: true), headers: headers, as: :json
+        expect(response).to be_successful
+        expect(response.body).to include("hello")
+      end
+    end
+
+    describe "with params[:photos] == true" do
+      it "returns only trips with photos" do
+        trip = build(:trip, from_city: 'hey guys', user: user)
+        trip.rides.build(photo: test_photo)
+        trip.save
+        create(:trip, from_city: "Atlantis")
+        get "/trips/latest?photos=true", as: :json
+        expect(response.body).to include("hey guys")
+        expect(response.body).not_to include("Atlantis")
+      end
+    end
+  end
 
   describe "POST /create_comment" do
     context "with valid parameters" do

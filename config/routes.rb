@@ -23,6 +23,9 @@ Rails.application.routes.draw do
     end
   end
   resources :trips do
+    collection do
+      get "latest"
+    end
     member do
       post :create_comment
     end

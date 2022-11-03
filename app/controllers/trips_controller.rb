@@ -21,6 +21,26 @@ class TripsController < ApplicationController
     end
   end
 
+  def latest
+    if params[:photos] == "true"
+      @trips = Trip
+        .includes(:rides)
+        .ransack(rides_photo_present: true)
+        .result(distinct: true)
+        .order(id: :desc)
+        .limit(3)
+    elsif params[:stories] == "true"
+      @trips = Trip
+        .includes(:rides)
+        .ransack(rides_story_present: true)
+        .result
+        .order(id: :desc)
+        .limit(3)
+    else
+      @trips = Trip.order(id: :desc).limit(3)
+    end
+  end
+
   def show
   end
 
