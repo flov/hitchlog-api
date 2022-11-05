@@ -45,3 +45,8 @@ end
 json.rides do
   json.array! trip.rides.order(id: :asc), partial: "rides/ride", as: :ride
 end
+json.comments do
+  json.array! trip.comments.order(id: :asc) do |comment|
+    json.partial! "post_comments/post_comment", comment: comment
+  end
+end

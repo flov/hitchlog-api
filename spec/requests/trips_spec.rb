@@ -223,7 +223,27 @@ RSpec.describe "/trips", type: :request do
   end
 
   describe "POST /create_comment" do
+    context "when not logged in" do
+      it "does not create a comment" do
+        expect {
+          post create_comment_trip_url(trip.id),
+            params: {comment: {body: 'hello'}},
+            as: :json
+        }.to change(Comment, :count).by(0)
+      end
+    end
+
     context "with valid parameters" do
+      it 'renders a JSON response with the new comment' do
+        post create_comment_trip_url(trip.id),
+          params: {comment: {body: 'hello'}},
+          headers: auth_headers,
+          as: :json
+        expect(response).to have_http_status(:created)
+        expect(response.content_type).to match(a_string_including("application/json"))
+        expect(response.body).to include("hello")
+      end
+
       it "creates a new comment" do
         expect {
           post create_comment_trip_url(trip.id),

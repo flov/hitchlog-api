@@ -33,12 +33,12 @@ RSpec.describe "/posts", type: :request do
         it "renders a JSON response with the new post" do
           expect {
             post posts_url,
-              params: {post: valid_attributes},
+              params: {post: {body: "example body", title: "example title"}},
               headers: auth_headers,
               as: :json
           }.to change(Post, :count).by(1)
           expect(response).to have_http_status(:created)
-          expect(respnse.body).to match(/MyText/)
+          expect(response.body).to match(/example body/)
           expect(response.content_type).to match(a_string_including("application/json"))
         end
       end

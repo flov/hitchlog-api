@@ -28,7 +28,7 @@ class TripsController < ApplicationController
         .ransack(rides_photo_present: true)
         .result(distinct: true)
         .order(id: :desc)
-        .limit(3)
+        .limit(8)
     elsif params[:stories] == "true"
       @trips = Trip
         .includes(:rides)
@@ -88,13 +88,13 @@ class TripsController < ApplicationController
   end
 
   def create_comment
-    comment = Comment.new(comment_params)
-    comment.trip_id = params[:id]
-    comment.user = current_user
-    if comment.save
-      render json: comment, status: :created
+    @comment = Comment.new(comment_params)
+    @comment.trip_id = params[:id]
+    @comment.user = current_user
+    if @comment.save
+      render 'post_comments/show', status: :created
     else
-      render json: comment.errors, status: :unprocessable_entity
+      render json: @comment.errors, status: :unprocessable_entity
     end
   end
 
