@@ -1,6 +1,8 @@
 name: "Ruby on Rails CI"
 
 on: [push]
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,35 +13,44 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_DB: 'hitchlog_api_test'
-          POSTGRES_USER: 'hitchlog_api'
+          POSTGRES_USER: 'postgres'
           POSTGRES_PASSWORD: 'password'
     env:
       RAILS_ENV: test
       DB_PASSWORD: password
-      DB_USER: hitchlog_api
-      
+      DB_USER: postgres
+      DEVISE_JWT_SECRET_KEY: 3349947ac642f986c4d7053d52342d598b47d1d94cc1a106fd91fa64c03081bf38128314c82a57bfea1b28adabe123123919123912391231231231231231e36
     steps:
-    - run: npm install -g pnpm
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
     - name: Install required apt packages
       run: |
         sudo apt-get -y install libpq-dev
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.1.2'
+        ruby-version: '3.1.2' # Not needed with a .ruby-version file
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Setup cache key and directory for gems cache
       uses: actions/cache@v1
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
-    - name: Bundle install
+    # Install local deps if this action is being run locally
+    - name: Install local dependencies
+      if: ${{ env.ACT }}
       run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-    - uses: actions/checkout@v3
-    - name: Set up database schema
-      run: bundle exec rake db:schema:load
-    - name: Run tests
-      run: bundle exec rake
+        sudo apt-get update
+        sudo apt-get -yqq install libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2 libxshmfence-dev postgresql postgresql-contrib
+    - name: Boot local dependencies
+      if: ${{ env.ACT }}
+      run: |
+        sudo service postgresql start
+    - name: Configure local dependencies
+      if: ${{ env.ACT }}
+      run: |
+        sudo -u postgres psql -U postgres -d postgres -c "alter user postgres with password 'password';"
+    - name: checkout code
+      uses: actions/checkout@v3
+    - run: bundle install
+    - run: bundle exec rake db:create
+    - run: bundle exec rake db:schema:load
+    - run: bundle exec rake db:migrate
+    - run: bundle exec rake
