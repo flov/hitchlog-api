@@ -19,12 +19,26 @@ jobs:
       DB_USER: hitchlog_api
       
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Install Ruby and gems
-      uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
+    - run: npm install -g pnpm
+    - uses: actions/setup-node@v3
       with:
-        bundler-cache: true
+        node-version: 16
+    - name: Install required apt packages
+      run: |
+        sudo apt-get -y install libpq-dev
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '3.1.2'
+    - name: Setup cache key and directory for gems cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
+    - name: Bundle install
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    - uses: actions/checkout@v3
     - name: Set up database schema
       run: bundle exec rake db:schema:load
     - name: Run tests
