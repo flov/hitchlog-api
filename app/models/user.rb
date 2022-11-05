@@ -31,6 +31,10 @@ class User < ApplicationRecord
     hash
   end
 
+  def to_param
+    username
+  end
+
   def md5_email
     Digest::MD5.hexdigest(email)
   end
@@ -164,6 +168,10 @@ class User < ApplicationRecord
       errors.add(:confirmation_token, :invalid)
     end
     user
+  end
+
+  def to_s
+    username.capitalize
   end
 
   private

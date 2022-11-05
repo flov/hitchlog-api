@@ -37,6 +37,8 @@ RSpec.describe "/trips", type: :request do
   }
   let(:invalid_attributes) { {trip: {yo: "hello"}} }
   let(:user) { create(:confirmed_user) }
+  let(:user_1) { create(:confirmed_user, id: 2) }
+  let(:user_2) { create(:confirmed_user, id: 3) }
   let(:headers) {
     {
       "Accept" => "application/json",
@@ -45,6 +47,8 @@ RSpec.describe "/trips", type: :request do
   }
   let(:trip) { create(:trip, user: user) }
   let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
+  let(:user_1_auth_headers) { JWTHelpers.auth_headers(headers, user_1) }
+  let(:user_2_auth_headers) { JWTHelpers.auth_headers(headers, user_2) }
 
   describe "GET /index" do
     context "searches with parameters" do
@@ -233,33 +237,69 @@ RSpec.describe "/trips", type: :request do
       end
     end
 
-    context "with valid parameters" do
-      it 'renders a JSON response with the new comment' do
-        post create_comment_trip_url(trip.id),
-          params: {comment: {body: 'hello'}},
-          headers: auth_headers,
-          as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
-        expect(response.body).to include("hello")
-      end
+    context "when logged in" do
+      context "with valid parameters" do
+        it 'renders a JSON response with the new comment' do
+          post create_comment_trip_url(trip.id),
+            params: {comment: {body: 'hello'}},
+            headers: auth_headers,
+            as: :json
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to match(a_string_including("application/json"))
+          expect(response.body).to include("hello")
+        end
 
-      it "creates a new comment" do
-        expect {
+        it "creates a new comment" do
+          expect {
+            post create_comment_trip_url(trip.id),
+              params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
+          }.to change(Comment, :count).by(1)
+          expect(response).to have_http_status(:created)
+        end
+
+        context 'another user comments on a trip' do
+          it 'notifies the owner that someone commented on their trip' do
+            expect(CommentMailer).to receive(:notify_trip_owner)
+              .and_call_original
+            post create_comment_trip_url(trip.id),
+              params: {comment: {body: "hello"}},
+              headers: user_1_auth_headers,
+              as: :json
+          end
+        end
+
+        context "user 1 has already commented on the trip and user 2 comments" do
+          it 'notifies user 1 and not user 2 and the author of the trip' do
+            user_1
+            user_2
+            trip.comments.create(body: 'hello', user: user_1)
+            expect(CommentMailer).to receive(:notify_trip_owner)
+              .and_call_original
+            expect(CommentMailer).to receive(:notify_comment_authors)
+              .once
+              .and_call_original
+            post create_comment_trip_url(trip.id),
+              params: {comment: {body: "yoyoyo"}},
+              headers: user_2_auth_headers,
+              as: :json
+          end
+
+        end
+
+        it 'notifies everyone who commented on the trip except for the comment author' do
           post create_comment_trip_url(trip.id),
             params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
-        }.to change(Comment, :count).by(1)
-        expect(response).to have_http_status(:created)
+        end
       end
-    end
 
-    context "with invalid parameters" do
-      it "does not create a new comment and returns 422" do
-        expect {
-          post create_comment_trip_url(trip.id),
-            params: {comment: {body: ""}}, headers: auth_headers, as: :json
-        }.to change(Comment, :count).by(0)
-        expect(response).to have_http_status(:unprocessable_entity)
+      context "with invalid parameters" do
+        it "does not create a new comment and returns 422" do
+          expect {
+            post create_comment_trip_url(trip.id),
+              params: {comment: {body: ""}}, headers: auth_headers, as: :json
+          }.to change(Comment, :count).by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
     end
   end

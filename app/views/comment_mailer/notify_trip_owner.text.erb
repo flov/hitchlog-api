@@ -1,0 +1,17 @@
+Hello <%= @trip.user %>!
+
+<%= @comment.user %> commented on your trip '<%= @trip %>':
+
+---------------------------------------------
+<%= @comment %>
+---------------------------------------------
+
+To comment on the trip as well, please visit the trip's page.
+
+Your Trip: <%= trip_url(@trip) %>
+<%= @comment.user %>'s Hitchlog Profile: 
+<%= url_for :controller => 'users', :action => 'show', :id => @comment.user.id %>
+Your Hitchlog Profile: <%= url_for(controller: :users, action: 'show', id: @trip.user.id) %>
+
+Happy Hitchhiking :)
+The Hitchlog

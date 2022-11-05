@@ -31,6 +31,10 @@ class Trip < ApplicationRecord
     end
   end
 
+  def to_s
+    "Trip from #{sanitize_address("from")} to #{sanitize_address("to")}"
+  end
+
   def to_param
     origin = CGI.escape(sanitize_address("from"))
     destin = CGI.escape(sanitize_address("to"))

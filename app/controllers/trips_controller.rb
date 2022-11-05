@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[create update destroy]
+  before_action :authenticate_user!, only: %i[create create_comment update destroy]
   before_action :trip_owner?, only: %i[update destroy]
 
   def index
@@ -96,12 +96,27 @@ class TripsController < ApplicationController
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
+    notify_trip_owner_and_comment_authors(@comment)
   end
 
   private
 
   def notify_trip_owner_and_comment_authors(comment)
-    # TODO...
+    # notify all comment authors who are not the trip owner and not the comment author
+    comment_authors = Comment
+      .where(trip_id: comment.trip_id)
+      .where("user_id != #{comment.user.id}")
+      .where("user_id != #{comment.trip.user.id}")
+      .select('DISTINCT user_id')
+      .map(&:user)
+
+    comment_authors.each do |author|
+      CommentMailer.notify_comment_authors(comment, author).deliver_now
+    end
+
+    if comment.user == comment.trip.user
+      CommentMailer.notify_trip_owner(comment).deliver_now
+    end
   end
 
   def trip_owner?
