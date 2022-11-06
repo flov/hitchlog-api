@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <head>
+  <body>
+    <h1>Hello <%= @trip.user %>!</h1>
+    <p>
+      <%= @comment.user %> commented on your trip '<%= @trip %>':
+    </p>
+    <p>
+      <%= @comment %>
+    </p>
+    <p>
+      To comment on the trip as well, please visit the trip's page.
+    </p>
+    <p>
+      Your Trip: <%= trip_url(@trip) %>
+      <%= @comment.user %>'s Hitchlog Profile: 
+      <%= url_for :controller => 'users', :action => 'show', :id => @comment.user.id %>
+      Your Hitchlog Profile: <%= url_for(controller: :users, action: 'show', id: @trip.user.id) %>
+    </p>
+
+    <p>
+      Happy Hitchhiking :)
+    </p>
+    <p>
+      The Hitchlog
+    </p>
+  </body>
+  </head>
+</html>
+

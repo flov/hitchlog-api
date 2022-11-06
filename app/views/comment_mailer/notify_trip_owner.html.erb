@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <head>
+  <body>
+    <h1>Hello <%= @trip.user %>!</h1>
+    <p>
+      <%= @comment.user %> commented on your trip '<%= @trip %>':
+    </p>
+    <p>
+      "<br />
+      <%= @comment %> <br />
+      "
+    </p>
+    <p>
+      To comment on the trip as well, please visit the trip's page.
+    </p>
+    <p>
+    Your Trip:
+    <%= link_to "#{ENV['FRONTEND']}/trips/#{@trip.to_param}", "#{ENV['FRONTEND']}/trips/#{@trip.to_param}" %>
+      <br />
+      <%= @comment.user %>'s Hitchlog Profile: 
+      <%= link_to "#{ENV['FRONTEND']}/hitchhikers/#{@comment.user.to_param}" , "#{ENV['FRONTEND']}/hitchhikers/#{@comment.user.to_param}" %>
+      <br/>
+      Your Hitchlog Profile: <%= link_to "#{ENV['FRONTEND']}/hitchhikers/#{@trip.user.to_param}", "#{ENV['FRONTEND']}/hitchhikers/#{@trip.user.to_param}" %>
+    </p>
+    <p>
+      Happy Hitchhiking :)
+      <br />
+      The Hitchlog
+    </p>
+  </body>
+  </head>
+</html>

@@ -32,7 +32,7 @@ class User < ApplicationRecord
   end
 
   def to_param
-    username
+    username.downcase
   end
 
   def md5_email

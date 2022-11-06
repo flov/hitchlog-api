@@ -114,7 +114,7 @@ class TripsController < ApplicationController
       CommentMailer.notify_comment_authors(comment, author).deliver_now
     end
 
-    if comment.user == comment.trip.user
+    if comment.user != comment.trip.user
       CommentMailer.notify_trip_owner(comment).deliver_now
     end
   end
