@@ -3,6 +3,9 @@
 # Rails 7 API only app for the hitchlog
 
 - JWT Authentication with devise-jwt
+- Fully flexible Search with Ransack
+
+This is the backend for the frontend [hitchlog-nextjs](https://github.com/flov/hitchlog-nextjs)
 
 ## Tech stack
 
