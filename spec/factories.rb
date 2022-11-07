@@ -11,7 +11,7 @@ FactoryBot.define do
   factory :post do
     title { "MyString" }
     body { "MyText" }
-    tag { 'tag' }
+    tag { "tag" }
     user
   end
 

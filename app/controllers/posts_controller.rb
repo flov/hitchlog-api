@@ -53,7 +53,7 @@ class PostsController < ApplicationController
       post: @post
     )
     if @comment.save
-      render 'post_comments/show', status: :created
+      render "post_comments/show", status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end

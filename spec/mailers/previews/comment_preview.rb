@@ -18,4 +18,3 @@ class CommentPreview < ActionMailer::Preview
     @author ||= User.first
   end
 end
-

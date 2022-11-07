@@ -125,7 +125,7 @@ RSpec.describe "/posts", type: :request do
           }.to change(PostComment, :count).by(1)
         end
 
-        it 'renders a JSON response with the new comment' do
+        it "renders a JSON response with the new comment" do
           post create_comment_post_url(post_entity.to_param),
             params: {post_comment: {body: "comment body"}},
             headers: auth_headers,
@@ -166,10 +166,10 @@ RSpec.describe "/posts", type: :request do
       end
     end
   end
-  
+
   describe "PATCH /update" do
     context "when user id is not 1" do
-      it 'should not be authorized' do
+      it "should not be authorized" do
         patch post_url(post_entity.to_param),
           params: {post: valid_attributes},
           headers: not_admin_headers,
@@ -179,7 +179,7 @@ RSpec.describe "/posts", type: :request do
     end
     context "when user id is 1" do
       context "with valid parameters" do
-        it 'updates the post and renders a JSON response with the post' do
+        it "updates the post and renders a JSON response with the post" do
           patch post_url(post_entity.to_param),
             params: {post: valid_attributes},
             headers: auth_headers,

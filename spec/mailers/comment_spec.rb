@@ -18,4 +18,3 @@ RSpec.describe CommentMailer do
     end
   end
 end
-

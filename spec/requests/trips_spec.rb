@@ -167,9 +167,9 @@ RSpec.describe "/trips", type: :request do
       end
     end
   end
-  
+
   describe "GET /latest" do
-    let (:test_photo) {
+    let(:test_photo) {
       Rack::Test::UploadedFile.new(
         File.join(Rails.root, "spec", "support", "images", "thumb.png")
       )
@@ -192,10 +192,11 @@ RSpec.describe "/trips", type: :request do
     describe "with params[:videos] = true" do
       it "returns the latest trip with a video" do
         trip1 = build(:trip, from_city: "Kiew")
-        trip1.rides.build(youtube: '00000000001')
+        trip1.rides.build(youtube: "00000000001")
         trip2 = build(:trip, from_city: "Berlin")
-        trip2.rides.build(youtube: '00000000002')
-        trip1.save; trip2.save
+        trip2.rides.build(youtube: "00000000002")
+        trip1.save
+        trip2.save
         get latest_trips_url(videos: true), headers: headers, as: :json
         expect(response.body).to_not include("Kiew")
         expect(response.body).to include("Berlin")
@@ -215,7 +216,7 @@ RSpec.describe "/trips", type: :request do
 
     describe "with params[:photos] == true" do
       it "returns only trips with photos" do
-        trip = build(:trip, from_city: 'hey guys', user: user)
+        trip = build(:trip, from_city: "hey guys", user: user)
         trip.rides.build(photo: test_photo)
         trip.save
         create(:trip, from_city: "Atlantis")
@@ -231,7 +232,7 @@ RSpec.describe "/trips", type: :request do
       it "does not create a comment" do
         expect {
           post create_comment_trip_url(trip.id),
-            params: {comment: {body: 'hello'}},
+            params: {comment: {body: "hello"}},
             as: :json
         }.to change(Comment, :count).by(0)
       end
@@ -239,9 +240,9 @@ RSpec.describe "/trips", type: :request do
 
     context "when logged in" do
       context "with valid parameters" do
-        it 'renders a JSON response with the new comment' do
+        it "renders a JSON response with the new comment" do
           post create_comment_trip_url(trip.id),
-            params: {comment: {body: 'hello'}},
+            params: {comment: {body: "hello"}},
             headers: auth_headers,
             as: :json
           expect(response).to have_http_status(:created)
@@ -257,8 +258,8 @@ RSpec.describe "/trips", type: :request do
           expect(response).to have_http_status(:created)
         end
 
-        context 'another user comments on a trip' do
-          it 'notifies the owner that someone commented on their trip' do
+        context "another user comments on a trip" do
+          it "notifies the owner that someone commented on their trip" do
             expect(CommentMailer).to receive(:notify_trip_owner)
               .and_call_original
             post create_comment_trip_url(trip.id),
@@ -269,10 +270,10 @@ RSpec.describe "/trips", type: :request do
         end
 
         context "user 1 has already commented on the trip and user 2 comments" do
-          it 'notifies user 1 and not user 2 and the author of the trip' do
+          it "notifies user 1 and not user 2 and the author of the trip" do
             user_1
             user_2
-            trip.comments.create(body: 'hello', user: user_1)
+            trip.comments.create(body: "hello", user: user_1)
             expect(CommentMailer).to receive(:notify_trip_owner)
               .and_call_original
             expect(CommentMailer).to receive(:notify_comment_authors)
@@ -283,10 +284,9 @@ RSpec.describe "/trips", type: :request do
               headers: user_2_auth_headers,
               as: :json
           end
-
         end
 
-        it 'notifies everyone who commented on the trip except for the comment author' do
+        it "notifies everyone who commented on the trip except for the comment author" do
           post create_comment_trip_url(trip.id),
             params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
         end
