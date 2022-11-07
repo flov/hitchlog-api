@@ -1,4 +1,4 @@
-name: "Ruby on Rails CI"
+name: "CI Pipeline"
 
 on: [push]
 env:
