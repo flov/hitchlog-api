@@ -19,7 +19,7 @@ jobs:
       RAILS_ENV: test
       DB_PASSWORD: password
       DB_USER: postgres
-      DEVISE_JWT_SECRET_KEY: 3349947ac642f986c4d7053d52342d598b47d1d94cc1a106fd91fa64c03081bf38128314c82a57bfea1b28adabe123123919123912391231231231231231e36
+      DEVISE_JWT_SECRET_KEY: 1233123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123919123912391231231231231231e36
     steps:
     - name: Install required apt packages
       run: |
@@ -50,7 +50,6 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v3
     - run: bundle install
-    - run: bundle exec rake db:create
     - run: bundle exec rake db:schema:load
     - run: bundle exec rake db:migrate
     - run: bundle exec rake
