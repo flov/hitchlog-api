@@ -22,29 +22,29 @@ class TripsController < ApplicationController
   end
 
   def latest
-    if params[:photos] == "true"
-      @trips = Trip
+    @trips = if params[:photos] == "true"
+      Trip
         .includes(:rides)
         .ransack(rides_photo_present: true)
-        .result(distinct: true)
-        .order(id: :desc)
-        .limit(8)
+        .result
+        .order(Arel.sql("RANDOM()"))
+        .limit(13)
     elsif params[:stories] == "true"
-      @trips = Trip
+      Trip
         .includes(:rides)
         .ransack(rides_story_present: true)
         .result
-        .order(id: :desc)
-        .limit(3)
+        .order(Arel.sql("RANDOM()"))
+        .limit(1)
     elsif params[:videos] == "true"
-      @trips = Trip
+      Trip
         .includes(:rides)
         .ransack(rides_youtube_present: true)
         .result
-        .order(id: :desc)
+        .order(Arel.sql("RANDOM()"))
         .limit(1)
     else
-      @trips = Trip.order(id: :desc).limit(3)
+      Trip.order(id: :desc).limit(3)
     end
   end
 
@@ -92,7 +92,7 @@ class TripsController < ApplicationController
     @comment.trip_id = params[:id]
     @comment.user = current_user
     if @comment.save
-      render 'post_comments/show', status: :created
+      render "post_comments/show", status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity
     end
@@ -107,7 +107,7 @@ class TripsController < ApplicationController
       .where(trip_id: comment.trip_id)
       .where("user_id != #{comment.user.id}")
       .where("user_id != #{comment.trip.user.id}")
-      .select('DISTINCT user_id')
+      .select("DISTINCT user_id")
       .map(&:user)
 
     comment_authors.each do |author|
