@@ -1,3 +1,5 @@
+![Github actions CI pipeline Badge](https://github.com/flov/hitchlog-api/actions/workflows/ci.yml/badge.svg)
+
 # Rails 7 API only app for the hitchlog
 
 - JWT Authentication with devise-jwt
