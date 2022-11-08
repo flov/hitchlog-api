@@ -9,8 +9,8 @@ FactoryBot.define do
   end
 
   factory :post do
-    title { "MyString" }
-    body { "MyText" }
+    title { "Example post" }
+    body { "Example body" }
     tag { "tag" }
     user
   end

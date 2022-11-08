@@ -1,6 +1,4 @@
 class CommentMailer < ApplicationMailer
-  default from: "noreply@hitchlog.com"
-
   def notify_comment_authors(comment, author)
     @comment, @author, @trip = comment, author, comment.trip
     mail(to: @author.email,

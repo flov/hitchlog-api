@@ -125,6 +125,15 @@ RSpec.describe "/posts", type: :request do
           }.to change(PostComment, :count).by(1)
         end
 
+        it "sends a notification email" do
+          post create_comment_post_url(post_entity.to_param),
+            params: {post_comment: {body: "testing comment notification"}},
+            headers: auth_headers,
+            as: :json
+          expect(ActionMailer::Base.deliveries.last.subject).to eq("[Hitchlog] New comment on your post")
+          expect(ActionMailer::Base.deliveries.last.body).to include("testing comment notification")
+        end
+
         it "renders a JSON response with the new comment" do
           post create_comment_post_url(post_entity.to_param),
             params: {post_comment: {body: "comment body"}},

@@ -53,6 +53,7 @@ class PostsController < ApplicationController
       post: @post
     )
     if @comment.save
+      PostMailer.notify_post_author(@comment).deliver_now
       render "post_comments/show", status: :created
     else
       render json: @comment.errors, status: :unprocessable_entity

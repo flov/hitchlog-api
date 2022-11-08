@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <head>
+  </head>
+  <body>
+    <h1>Hello <%= @comment.post.user %>!</h1>
+    <p>
+      <%= @comment.user %> commented on your post '<%= @comment.post.title %>':
+    </p>
+    <p>
+      <%= @comment.body %>
+    </p>
+    <p>
+      Post: <%= post_url(@comment.post) %>
+      <%= @comment.user %>'s Hitchlog Profile: 
+      <%= url_for :controller => 'users', :action => 'show', :id => @comment.user.username %>
+      Your Hitchlog Profile: <%= url_for(controller: :users,
+                                         action: 'show',
+                                         id: @comment.user.username) %>
+    </p>
+
+    <p>
+      Happy Hitchhiking :)
+    </p>
+    <p>
+      The Hitchlog
+    </p>
+  </body>
+  </head>
+</html>
+
+
