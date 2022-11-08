@@ -193,13 +193,9 @@ RSpec.describe "/trips", type: :request do
       it "returns the latest trip with a video" do
         trip1 = build(:trip, from_city: "Kiew")
         trip1.rides.build(youtube: "00000000001")
-        trip2 = build(:trip, from_city: "Berlin")
-        trip2.rides.build(youtube: "00000000002")
         trip1.save
-        trip2.save
         get latest_trips_url(videos: true), headers: headers, as: :json
-        expect(response.body).to_not include("Kiew")
-        expect(response.body).to include("Berlin")
+        expect(response.body).to include("Kiew")
       end
     end
 
