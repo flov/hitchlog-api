@@ -50,6 +50,8 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v3
     - run: bundle install
+    - if: ${{ env.ACT }}
+      run: bundle exec rake db:create
     - run: bundle exec rake db:schema:load
     - run: bundle exec rake db:migrate
     - run: bundle exec rake
