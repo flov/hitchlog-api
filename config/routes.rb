@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post "send_message"
     end
     collection do
+      post "contact_form"
       post "confirm"
       get "me"
     end

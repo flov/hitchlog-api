@@ -15,4 +15,13 @@ class UserMailer < ApplicationMailer
       subject: "[Hitchlog] Message from user #{from_user.username.capitalize}"
     )
   end
+
+  def contact_form(message, name, email)
+    @message, @name, @email = message, name, email
+    mail(
+      to: "florian@hitchlog.com",
+      from: "#{name} <#{email}>",
+      subject: "[Hitchlog] Contact form message from #{@name}"
+    )
+  end
 end

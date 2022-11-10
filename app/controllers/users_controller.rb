@@ -65,6 +65,15 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /users/contact_form
+  def contact_form
+    UserMailer.contact_form(
+      contact_form_params[:message],
+      contact_form_params[:name],
+      contact_form_params[:email]
+    ).deliver_now
+  end
+
   def confirm
     @user = User.confirm_by_token(params[:confirmation_token])
     if @user && @user.errors.empty?
@@ -85,6 +94,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     @user = User.find_by_username(params[:id])
+  end
+
+  def contact_form_params
+    params.fetch(:contact_form, {}).permit(:email, :message, :name)
   end
 
   # Only allow a list of trusted parameters through.

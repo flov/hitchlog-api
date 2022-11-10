@@ -12,4 +12,17 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["noreply@hitchlog.com"])
     end
   end
+
+  describe "contact_form" do
+    let(:user) { create(:confirmed_user) }
+    let(:name) { "John Doe" }
+    let(:email) { "xyz@example.com" }
+    let(:mail) { UserMailer.contact_form("example message", name, email) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("[Hitchlog] Contact form message from John Doe")
+      expect(mail.to).to eq(["florian@hitchlog.com"])
+      expect(mail.from).to eq(["xyz@example.com"])
+    end
+  end
 end
