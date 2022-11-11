@@ -35,25 +35,6 @@ RSpec.describe UsersController, type: :request do
       end
     end
   end
-  
-  describe "POST /contact_form" do
-    it "sends an email" do
-      post contact_form_users_url,
-        params: {
-          contact_form: {
-            name: "Florian",
-            email: "example@xyz.com",
-            message: "Hello"
-          }
-        }, headers: headers, as: :json
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.last.subject).to eq(
-        "[Hitchlog] Contact form message from Florian"
-      )
-      expect(ActionMailer::Base.deliveries.last.body).to include("Hello")
-      expect(ActionMailer::Base.deliveries.last.from).to eq(["example@xyz.com"])
-    end
-  end
 
   describe "POST /send_message" do
     context "signed in" do

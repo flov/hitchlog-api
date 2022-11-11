@@ -15,9 +15,10 @@
       Post: <%= post_url(@comment.post) %>
       <%= @comment.user %>'s Hitchlog Profile: 
       <%= url_for :controller => 'users', :action => 'show', :id => @comment.user.username %>
+      <br />
       Your Hitchlog Profile: <%= url_for(controller: :users,
                                          action: 'show',
-                                         id: @comment.user.username) %>
+                                         id: @comment.post.user.username) %>
     </p>
 
     <p>

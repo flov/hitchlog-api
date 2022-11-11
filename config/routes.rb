@@ -5,6 +5,11 @@ Rails.application.routes.draw do
     passwords: "users/passwords"
   }
 
+  resources :statistics, only: [] do
+    collection do
+      get :top_10
+    end
+  end
   resources :rides
   resources :posts do
     member do
@@ -18,7 +23,6 @@ Rails.application.routes.draw do
       post "send_message"
     end
     collection do
-      post "contact_form"
       post "confirm"
       get "me"
     end
@@ -31,6 +35,7 @@ Rails.application.routes.draw do
       post :create_comment
     end
   end
+  post "mails/contact_form", to: "mails#contact_form"
   get "data/country_map", to: "data#country_map"
   get "data/trips_count", to: "data#trips_count"
   get "data/written_stories", to: "data#written_stories"
