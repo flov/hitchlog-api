@@ -2,6 +2,14 @@ require "factory_bot"
 require "faker"
 
 FactoryBot.define do
+  factory :notification do
+    mailer { "UserMailer" }
+    from { "example@foo.com" }
+    to { "example@bar.com" }
+    subject { "Subject" }
+    body { "Body" }
+  end
+
   factory :post_comment do
     body { "Comment body" }
     user

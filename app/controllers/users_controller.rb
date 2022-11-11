@@ -58,7 +58,10 @@ class UsersController < ApplicationController
     if @user == current_user
       render json: {error: "you can't send a message to yourself"}, status: :unprocessable_entity
     elsif @user
-      UserMailer.send_message(current_user, @user, params[:message]).deliver_now
+      UserMailer
+        .with(user: current_user)
+        .send_message(current_user, @user, params[:message])
+        .deliver_now
       render json: {message: "sent"}
     else
       render json: {error: "user not found"}, status: :not_found

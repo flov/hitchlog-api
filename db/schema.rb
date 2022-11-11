@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_31_144231) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_11_152935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_31_144231) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "mailer"
+    t.string "mailer_method"
+    t.string "from"
+    t.string "to"
+    t.string "subject"
+    t.text "body"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "people", id: :serial, force: :cascade do |t|
@@ -285,6 +298,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_31_144231) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  add_foreign_key "notifications", "users"
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"
   add_foreign_key "posts", "users"
