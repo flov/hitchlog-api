@@ -46,7 +46,7 @@ RSpec.describe "/trips", type: :request do
     }
   }
   let(:trip) { create(:trip, user: user) }
-  let(:auth_headers) { JWTHelpers.auth_headers(headers, user) }
+  let(:user_auth_headers) { JWTHelpers.auth_headers(headers, user) }
   let(:user_1_auth_headers) { JWTHelpers.auth_headers(headers, user_1) }
   let(:user_2_auth_headers) { JWTHelpers.auth_headers(headers, user_2) }
 
@@ -63,7 +63,7 @@ RSpec.describe "/trips", type: :request do
 
     it "renders a successful response" do
       create(:trip, from_city: "Kiew", to_city: "Krakow")
-      get trips_url, headers: auth_headers, as: :json
+      get trips_url, headers: user_auth_headers, as: :json
       expect(response.body).to include("Kiew")
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe "/trips", type: :request do
     context "with valid parameters" do
       it "creates a new Trip" do
         expect {
-          post trips_url, params: valid_attributes, headers: auth_headers, as: :json
+          post trips_url, params: valid_attributes, headers: user_auth_headers, as: :json
         }.to change(Trip, :count).by(1)
         expect(response).to have_http_status(:created)
         expect(Trip.last.rides.count).to eq(1)
@@ -88,7 +88,7 @@ RSpec.describe "/trips", type: :request do
       end
 
       it "renders a JSON response with the new trip" do
-        post trips_url, params: valid_attributes, headers: auth_headers, as: :json
+        post trips_url, params: valid_attributes, headers: user_auth_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(JSON.parse(response.body)["origin"]["name"]).to eq("teneirfe airport")
@@ -106,7 +106,7 @@ RSpec.describe "/trips", type: :request do
 
       it "renders a JSON response with errors for the new trip" do
         post trips_url,
-          params: invalid_attributes, headers: auth_headers, as: :json
+          params: invalid_attributes, headers: user_auth_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -120,7 +120,7 @@ RSpec.describe "/trips", type: :request do
       it "updates the requested trip" do
         trip
         patch trip_url(trip),
-          params: {trip: new_attributes}, headers: auth_headers, as: :json
+          params: {trip: new_attributes}, headers: user_auth_headers, as: :json
         trip.reload
         expect(trip.travelling_with).to eq(2)
       end
@@ -128,7 +128,7 @@ RSpec.describe "/trips", type: :request do
       it "renders a JSON response with the trip" do
         trip
         patch trip_url(trip),
-          params: {trip: new_attributes}, headers: auth_headers, as: :json
+          params: {trip: new_attributes}, headers: user_auth_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(response.body).to include("2")
@@ -142,7 +142,7 @@ RSpec.describe "/trips", type: :request do
         it "destroys the requested trip" do
           trip
           expect {
-            delete trip_url(trip), headers: auth_headers, as: :json
+            delete trip_url(trip), headers: user_auth_headers, as: :json
           }.to change(Trip, :count).by(-1)
         end
       end
@@ -151,7 +151,7 @@ RSpec.describe "/trips", type: :request do
         it "does not destroy the requested trip" do
           trip = create(:trip)
           expect {
-            delete trip_url(trip), headers: auth_headers, as: :json
+            delete trip_url(trip), headers: user_auth_headers, as: :json
           }.to change(Trip, :count).by(0)
         end
       end
@@ -181,7 +181,7 @@ RSpec.describe "/trips", type: :request do
         create(:trip, from_city: "Berlin")
         create(:trip, from_city: "Hamburg")
         create(:trip, from_city: "Munich")
-        get latest_trips_url, headers: auth_headers, as: :json
+        get latest_trips_url, headers: user_auth_headers, as: :json
         expect(response.body).to_not include("Kiew")
         expect(response.body).to include("Berlin")
         expect(response.body).to include("Hamburg")
@@ -239,7 +239,7 @@ RSpec.describe "/trips", type: :request do
         it "renders a JSON response with the new comment" do
           post create_comment_trip_url(trip.id),
             params: {comment: {body: "hello"}},
-            headers: auth_headers,
+            headers: user_auth_headers,
             as: :json
           expect(response).to have_http_status(:created)
           expect(response.content_type).to match(a_string_including("application/json"))
@@ -249,7 +249,7 @@ RSpec.describe "/trips", type: :request do
         it "creates a new comment" do
           expect {
             post create_comment_trip_url(trip.id),
-              params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
+              params: {comment: {body: "hello"}}, headers: user_auth_headers, as: :json
           }.to change(Comment, :count).by(1)
           expect(response).to have_http_status(:created)
         end
@@ -284,7 +284,7 @@ RSpec.describe "/trips", type: :request do
 
         it "notifies everyone who commented on the trip except for the comment author" do
           post create_comment_trip_url(trip.id),
-            params: {comment: {body: "hello"}}, headers: auth_headers, as: :json
+            params: {comment: {body: "hello"}}, headers: user_auth_headers, as: :json
         end
       end
 
@@ -292,8 +292,36 @@ RSpec.describe "/trips", type: :request do
         it "does not create a new comment and returns 422" do
           expect {
             post create_comment_trip_url(trip.id),
-              params: {comment: {body: ""}}, headers: auth_headers, as: :json
+              params: {comment: {body: ""}}, headers: user_auth_headers, as: :json
           }.to change(Comment, :count).by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+  end
+
+  describe "POST /like" do
+    context "not logged in" do
+      it "returns unauthorized" do
+        post like_trip_url(trip.id), as: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+    context "logged in" do
+      context "user has not liked the trip" do
+        it "creates a new like" do
+          expect {
+            post like_trip_url(trip.id), headers: user_auth_headers, as: :json
+          }.to change(Like, :count).by(1)
+          expect(response).to have_http_status(:created)
+        end
+      end
+      context "user has already liked the trip" do
+        it "does not create a new like" do
+          trip.likes.create(user: user)
+          expect {
+            post like_trip_url(trip.id), headers: user_auth_headers, as: :json
+          }.to change(Like, :count).by(0)
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end

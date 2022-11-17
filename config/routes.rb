@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get "latest"
     end
     member do
+      post :like
       post :create_comment
     end
   end

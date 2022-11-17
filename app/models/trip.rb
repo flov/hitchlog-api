@@ -4,6 +4,7 @@ class Trip < ApplicationRecord
   has_many :rides, dependent: :destroy
   has_many :country_distances, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   belongs_to :user
 
@@ -96,5 +97,9 @@ class Trip < ApplicationRecord
     if arrival && departure
       arrival - departure
     end
+  end
+
+  def liked_by?(user)
+    !!self.likes.find_by(user_id: user.id)
   end
 end

@@ -101,4 +101,11 @@ RSpec.describe Trip, type: :model do
       expect(trip.average_speed).to eq("5 km/h")
     end
   end
+
+  describe "#liked_by?" do
+    it "returns true if the trip is liked by the user" do
+      like = FactoryBot.create(:like, trip: trip)
+      expect(trip.liked_by?(like.user)).to eq(true)
+    end
+  end
 end

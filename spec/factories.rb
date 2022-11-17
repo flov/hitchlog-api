@@ -2,6 +2,11 @@ require "factory_bot"
 require "faker"
 
 FactoryBot.define do
+  factory :like do
+    user
+    trip
+  end
+
   factory :notification do
     mailer { "UserMailer" }
     from { "example@foo.com" }
