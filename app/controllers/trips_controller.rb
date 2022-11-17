@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[like create create_comment update destroy]
+  before_action :authenticate_user!, only: %i[create create_comment update destroy]
   before_action :trip_owner?, only: %i[update destroy]
 
   def index
@@ -87,17 +87,7 @@ class TripsController < ApplicationController
     @trip.destroy
   end
 
-  # POST /trips/1/like
-  def like
-    @trip = Trip.find(params[:id])
-    @like = @trip.likes.build(user: current_user)
-    if @like.save
-      render :show, status: :created, location: @trip
-    else
-      render json: @like.errors, status: :unprocessable_entity
-    end
-  end
-
+  # POST /trips/1/comments
   def create_comment
     @comment = Comment.new(comment_params)
     @comment.trip_id = params[:id]

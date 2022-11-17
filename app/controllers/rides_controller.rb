@@ -1,6 +1,6 @@
 class RidesController < ApplicationController
   before_action :set_ride, only: %i[show update destroy]
-  before_action :authenticate_user!, only: %i[create update destroy]
+  before_action :authenticate_user!, only: %i[like create update destroy]
   before_action :prove_ownership, only: %i[update destroy]
 
   # GET /rides
@@ -21,6 +21,17 @@ class RidesController < ApplicationController
   # DELETE /rides/1.json
   def destroy
     @ride.destroy
+  end
+
+  # PUT /rides/1/like.json
+  def like
+    @ride = Ride.find(params[:id])
+    @like = @ride.likes.build(user: current_user)
+    if @like.save
+      render :show, status: :created, location: @trip
+    else
+      render json: @like.errors.messages.values.flatten, status: :unprocessable_entity
+    end
   end
 
   private

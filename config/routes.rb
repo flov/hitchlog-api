@@ -10,7 +10,11 @@ Rails.application.routes.draw do
       get :top_10
     end
   end
-  resources :rides
+  resources :rides do
+    member do
+      put :like
+    end
+  end
   resources :posts do
     member do
       post :create_comment
@@ -18,21 +22,20 @@ Rails.application.routes.draw do
   end
   resources :users do
     member do
-      get "profile"
-      get "geomap"
-      post "send_message"
+      get :profile
+      get :geomap
+      post :send_message
     end
     collection do
-      post "confirm"
-      get "me"
+      post :confirm
+      get :me
     end
   end
   resources :trips do
     collection do
-      get "latest"
+      get :latest
     end
     member do
-      post :like
       post :create_comment
     end
   end

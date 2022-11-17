@@ -17,6 +17,7 @@ class Ride < ApplicationRecord
     "mixed"].freeze
 
   belongs_to :trip
+  has_many :likes
 
   validates_inclusion_of :experience, in: EXPERIENCES
   validates_inclusion_of :vehicle, in: VEHICLES, allow_blank: true
@@ -33,4 +34,8 @@ class Ride < ApplicationRecord
   acts_as_taggable_on :tags
 
   mount_uploader :photo, PhotoUploader
+
+  def liked_by?(user)
+    !!self.likes.find_by(user_id: user.id)
+  end
 end

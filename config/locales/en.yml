@@ -1,4 +1,11 @@
 en:
+  activerecord:
+    errors:
+      models:
+        like:
+          attributes:
+            user_id:
+              taken: "You already liked this Ride"
   hello: "Hello world"
   datetime:
     distance_in_words:

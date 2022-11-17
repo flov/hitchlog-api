@@ -299,32 +299,4 @@ RSpec.describe "/trips", type: :request do
       end
     end
   end
-
-  describe "POST /like" do
-    context "not logged in" do
-      it "returns unauthorized" do
-        post like_trip_url(trip.id), as: :json
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-    context "logged in" do
-      context "user has not liked the trip" do
-        it "creates a new like" do
-          expect {
-            post like_trip_url(trip.id), headers: user_auth_headers, as: :json
-          }.to change(Like, :count).by(1)
-          expect(response).to have_http_status(:created)
-        end
-      end
-      context "user has already liked the trip" do
-        it "does not create a new like" do
-          trip.likes.create(user: user)
-          expect {
-            post like_trip_url(trip.id), headers: user_auth_headers, as: :json
-          }.to change(Like, :count).by(0)
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-      end
-    end
-  end
 end

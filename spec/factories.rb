@@ -4,7 +4,7 @@ require "faker"
 FactoryBot.define do
   factory :like do
     user
-    trip
+    ride
   end
 
   factory :notification do

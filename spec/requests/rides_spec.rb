@@ -103,4 +103,40 @@ RSpec.describe "/rides", type: :request do
       end
     end
   end
+
+  describe "PUT /like" do
+    context "not logged in" do
+      it "returns unauthorized" do
+        put like_ride_url(ride.id), as: :json, headers: valid_headers
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+    context "logged in" do
+      context "user has not liked the ride" do
+        it "creates a new like" do
+          expect {
+            put like_ride_url(ride.id), headers: auth_headers, as: :json
+          }.to change(Like, :count).by(1)
+          expect(response).to have_http_status(:created)
+        end
+      end
+      context "user has already liked the ride" do
+        it "does not create a new like" do
+          ride.likes.create(user: user)
+          expect {
+            put like_ride_url(ride.id), headers: auth_headers, as: :json
+          }.to change(Like, :count).by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to include("You already liked this Ride")
+        end
+      end
+    end
+  end
+
+  describe "#liked_by?" do
+    it "returns true if the trip is liked by the user" do
+      like = FactoryBot.create(:like, ride: ride)
+      expect(ride.liked_by?(like.user)).to eq(true)
+    end
+  end
 end
