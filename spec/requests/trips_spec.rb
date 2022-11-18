@@ -196,6 +196,8 @@ RSpec.describe "/trips", type: :request do
         trip1.save
         get latest_trips_url(videos: true), headers: headers, as: :json
         expect(response.body).to include("Kiew")
+        expect(response.body).to include('"likes":0')
+        expect(response.body).to include('"already_liked":false')
       end
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_17_185808) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_135556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -169,6 +169,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_185808) do
     t.string "mission", limit: 255
     t.string "vehicle", limit: 255
     t.string "youtube", limit: 11
+    t.integer "likes_count"
     t.index ["experience"], name: "index_rides_on_experience"
     t.index ["gender"], name: "index_rides_on_gender"
     t.index ["number"], name: "index_rides_on_number"
@@ -250,6 +251,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_185808) do
     t.string "to_place_id"
     t.string "from_name"
     t.string "to_name"
+    t.integer "rides_count"
+    t.integer "comments_count"
     t.index ["from_country"], name: "index_trips_on_from_country"
     t.index ["from_lat"], name: "index_trips_on_from_lat"
     t.index ["from_lng"], name: "index_trips_on_from_lng"

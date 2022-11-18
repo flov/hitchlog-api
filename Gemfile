@@ -43,5 +43,6 @@ group :development do
   gem "spring"
   gem "solargraph"
   gem "hirb"
+  # n + 1 query detection:
   gem "bullet"
 end

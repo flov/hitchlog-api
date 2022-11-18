@@ -16,7 +16,7 @@ class Ride < ApplicationRecord
     "female",
     "mixed"].freeze
 
-  belongs_to :trip
+  belongs_to :trip, counter_cache: true
   has_many :likes
 
   validates_inclusion_of :experience, in: EXPERIENCES
@@ -36,6 +36,7 @@ class Ride < ApplicationRecord
   mount_uploader :photo, PhotoUploader
 
   def liked_by?(user)
+    return false if user.nil?
     !!self.likes.find_by(user_id: user.id)
   end
 end

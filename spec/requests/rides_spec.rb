@@ -33,6 +33,7 @@ RSpec.describe "/rides", type: :request do
       ride
       get rides_url, headers: valid_headers, as: :json
       expect(response).to be_successful
+      expect(response.body).to include('"already_liked":false')
     end
   end
 
@@ -118,6 +119,8 @@ RSpec.describe "/rides", type: :request do
             put like_ride_url(ride.id), headers: auth_headers, as: :json
           }.to change(Like, :count).by(1)
           expect(response).to have_http_status(:created)
+          expect(response.content_type).to match(a_string_including("application/json"))
+          expect(response.body).to include('"already_liked":true')
         end
       end
       context "user has already liked the ride" do
