@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_18_135556) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_19_153825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -256,6 +256,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_135556) do
     t.index ["from_country"], name: "index_trips_on_from_country"
     t.index ["from_lat"], name: "index_trips_on_from_lat"
     t.index ["from_lng"], name: "index_trips_on_from_lng"
+    t.index ["from_name"], name: "index_trips_on_from_name"
     t.index ["to_country"], name: "index_trips_on_to_country"
     t.index ["travelling_with"], name: "index_trips_on_travelling_with"
     t.index ["user_id"], name: "index_trips_on_user_id"

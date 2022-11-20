@@ -1,5 +1,5 @@
 class MigrateCounterCacheData < ActiveRecord::Migration[7.0]
-  def change
+  def up
     puts 'Migrating counter cache data...'
     puts 'Trips:'
     Trip.find_each do |trip|

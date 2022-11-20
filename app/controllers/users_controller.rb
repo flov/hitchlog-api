@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @page = params[:page] || 1
     @users = User
       .includes(:trips)
-      .ransack(trips_from_present: true)
+      .ransack(trips_from_name_present: true)
       .result(distinct: true)
       .order(created_at: :desc)
       .page(@page)

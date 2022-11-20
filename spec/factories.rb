@@ -86,8 +86,8 @@ FactoryBot.define do
 
   factory :trip do
     user
-    from { "berlin" }
-    to { "hamborg" }
+    from_name { "berlin" }
+    to_name { "hamburg" }
     from_city { "Berlin" }
     from_country { "Germany" }
     from_country_code { "DE" }

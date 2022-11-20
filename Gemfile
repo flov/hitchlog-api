@@ -22,6 +22,7 @@ gem "carrierwave", "~> 2.0"
 gem "fog-aws"
 gem "rmagick"
 gem "devise-jwt", "~> 0.10.0"
+gem "geocoder"
 
 group :development, :test do
   gem "dotenv-rails"

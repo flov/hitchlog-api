@@ -101,4 +101,31 @@ RSpec.describe Trip, type: :model do
       expect(trip.average_speed).to eq("5 km/h")
     end
   end
+  
+  describe "#update_missing_geocode_information" do
+    context "from_lat and to_lat is empty" do
+      it "updates missing geocode information" do
+        allow(Geocoder).to receive(:search).with("Kabul")
+          .and_return([OpenStruct.new(
+            latitude: 34.5260109,
+            longitude: 69.1776838
+          )])
+        allow(Geocoder).to receive(:search).with("Kiew")
+          .and_return([OpenStruct.new(
+            latitude: 50.4500336,
+            longitude: 30.5241361
+          )])
+        trip.save
+        trip.from_lng = nil
+        trip.from_lat = nil
+        trip.to_lng = nil
+        trip.to_lat = nil
+        trip.from_city = "Kabul"
+        trip.to_city = "Kiew"
+        trip.update_missing_geocode_information
+        expect(trip.from_coordinates).to eq('34.5260109,69.1776838')
+        expect(trip.to_coordinates).to eq('50.4500336,30.5241361')
+      end
+    end
+  end
 end
