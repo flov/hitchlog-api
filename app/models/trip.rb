@@ -98,54 +98,6 @@ class Trip < ApplicationRecord
     end
   end
 
-  def update_missing_geocode_information
-    ["from", "to"].each do |direction|
-      missing_information = [];
-      ["formatted_address", "lat", "lng", "city", "country", "name", "country_code"].each do |attribute|
-        missing_information << attribute if send("#{direction}_#{attribute}").blank?
-        if attribute == 'formatted_address'
-          if send("#{direction}_#{attribute}") == 'unknown'
-            missing_information << 'formatted_address'
-          end
-        end
-      end
-      if missing_information.any?
-        puts "Missing information for #{id} #{sanitize_address(direction)}: #{missing_information.join(", ")}" if Rails.env != 'test'
-        geocode = Geocoder.search(sanitize_address(direction)).first
-        if geocode
-          missing_information.each do |missing_attribute|
-            if missing_attribute == 'formatted_address'
-              update_column("#{direction}_formatted_address", geocode.address)
-            elsif missing_attribute == 'name'
-              update_column("#{direction}_name", geocode.address)
-            elsif missing_attribute == 'lat'
-              update_column("#{direction}_lat", geocode.latitude)
-            elsif missing_attribute == 'lng'
-              update_column("#{direction}_lng", geocode.longitude)
-            else
-              update_column("#{direction}_#{missing_attribute}", geocode.send(missing_attribute))
-            end
-          end
-        else
-          puts "No geocode found for #{sanitize_address(direction)}"
-        end
-        if send("#{direction}_lat").blank? || send("#{direction}_lng").blank?
-          puts "Missing coordinates for #{direction}"
-          Geocoder.search(sanitize_address(direction)).first.tap do |result|
-            if result
-              update_column("#{direction}_lat", result.latitude)
-              update_column("#{direction}_lng", result.longitude)
-            end
-          end
-        end
-      end
-    end
-    if travelling_with.blank?
-      update_column(:travelling_with, 1)
-      puts "Updated travelling_with for #{id}"
-    end
-  end
-
   def from_coordinates
     [from_lat, from_lng].join(",")
   end
