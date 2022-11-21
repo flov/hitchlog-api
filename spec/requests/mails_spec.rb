@@ -11,7 +11,7 @@ describe "/mails" do
             message: "Hello"
           }
         }, headers: headers, as: :json
-        
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.last.subject).to eq(
         "[Hitchlog] Contact form message from Florian"
@@ -21,5 +21,4 @@ describe "/mails" do
       expect(ActionMailer::Base.deliveries.last.to).to eq(["florian.vallen@gmail.com"])
     end
   end
-  
 end

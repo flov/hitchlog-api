@@ -17,6 +17,6 @@ class UserMailer < ApplicationMailer
   end
 
   def save_notification
-    puts 'save_notification'
+    puts "save_notification"
   end
 end

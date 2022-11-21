@@ -37,6 +37,6 @@ class Ride < ApplicationRecord
 
   def liked_by?(user)
     return false if user.nil?
-    !!self.likes.find_by(user_id: user.id)
+    !!likes.find_by(user_id: user.id)
   end
 end

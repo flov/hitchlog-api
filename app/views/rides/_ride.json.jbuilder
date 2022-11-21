@@ -10,7 +10,7 @@ json.youtube ride.youtube
 json.gender ride.gender
 json.tags ride.tag_list
 json.likes ride.likes.count
-json.already_liked ride.liked_by?(current_user) 
+json.already_liked ride.liked_by?(current_user)
 unless ride.photo_url.nil?
   json.photo_caption ride.photo_caption
   json.photo do

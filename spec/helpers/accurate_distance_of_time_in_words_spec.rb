@@ -27,4 +27,3 @@ RSpec.describe AccurateDistanceOfTimeInWordsHelper do
     end
   end
 end
-
