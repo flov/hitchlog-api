@@ -55,16 +55,7 @@ class TripsController < ApplicationController
   def create
     @trip = Trip.new(trip_params)
     @trip.user = current_user
-    # adds the origin and destination to the trip
-    if origin_params["origin"] && destination_params["destination"]
-      origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }
-      destination_params["destination"].each { |k, v| @trip.send("to_#{k}=", v) }
-    end
-    if country_distances_params["trip"]["country_distances"]
-      @trip.country_distances.build(
-        country_distances_params["trip"]["country_distances"]
-      )
-    end
+    update_trip
 
     if @trip.save
       render :show, status: :created, location: @trip
@@ -75,7 +66,8 @@ class TripsController < ApplicationController
 
   # PATCH/PUT /trips/1
   def update
-    if @trip.update(trip_params)
+    update_trip
+    if @trip.save && @trip.update(trip_params)
       render :show, status: :ok, location: @trip
     else
       render json: @trip.errors, status: :unprocessable_entity
@@ -121,6 +113,19 @@ class TripsController < ApplicationController
       CommentMailer
         .notify_trip_owner(comment)
         .deliver_now
+    end
+  end
+
+  def update_trip
+    # adds the origin and destination to the trip
+    if origin_params["origin"] && destination_params["destination"]
+      origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }
+      destination_params["destination"].each { |k, v| @trip.send("to_#{k}=", v) }
+    end
+    if country_distances_params["trip"]["country_distances"]
+      @trip.country_distances.build(
+        country_distances_params["trip"]["country_distances"]
+      )
     end
   end
 
