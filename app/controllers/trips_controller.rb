@@ -22,27 +22,27 @@ class TripsController < ApplicationController
   end
 
   def latest
+    filter = {}
+    if params[:photos].present?
+      filter['rides_photo_present'] = true
+    elsif params[:videos].present?
+      filter['rides_youtube_present'] = true
+    elsif params[:stories].present?
+      filter['rides_story_present'] = true
+    end
+
+    @trips = Trip
+      .includes(:rides)
+      .ransack(filter)
+      .result
+      .order(Arel.sql("RANDOM()"))
+
     @trips = if params[:photos] == "true"
-      Trip
-        .includes(:rides)
-        .ransack(rides_photo_present: true)
-        .result
-        .order(Arel.sql("RANDOM()"))
-        .limit(13)
+      @trips.limit(13)
     elsif params[:stories] == "true"
-      Trip
-        .includes(:rides)
-        .ransack(rides_story_present: true)
-        .result
-        .order(Arel.sql("RANDOM()"))
-        .limit(1)
+      @trips.limit(1)
     elsif params[:videos] == "true"
-      Trip
-        .includes(:rides)
-        .ransack(rides_youtube_present: true)
-        .result
-        .order(Arel.sql("RANDOM()"))
-        .limit(1)
+      @trips.limit(1)
     else
       Trip.order(id: :desc).limit(3)
     end
