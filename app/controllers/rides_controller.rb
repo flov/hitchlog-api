@@ -27,6 +27,7 @@ class RidesController < ApplicationController
   def like
     @ride = Ride.find(params[:id])
     @like = @ride.likes.build(user: current_user)
+    @ride.trip.update(likes_count: @ride.trip.likes_count + 1)
     if @like.save
       render :show, status: :created, location: @trip
     else
