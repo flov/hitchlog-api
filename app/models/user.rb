@@ -83,12 +83,12 @@ class User < ApplicationRecord
   def to_geomap
     hash = {"distances" => {}, "trip_count" => {}}
     trips.flat_map(&:country_distances).each do |cd|
-      if hash["distances"][Countries[cd.country]]
-        hash["distances"][Countries[cd.country]] += cd.distance / 1000
-        hash["trip_count"][Countries[cd.country]] += 1
+      if hash["distances"][Countries.name_to_code[cd.country]]
+        hash["distances"][Countries.name_to_code[cd.country]] += cd.distance / 1000
+        hash["trip_count"][Countries.name_to_code[cd.country]] += 1
       else
-        hash["distances"][Countries[cd.country]] = cd.distance / 1000
-        hash["trip_count"][Countries[cd.country]] = 1
+        hash["distances"][Countries.name_to_code[cd.country]] = cd.distance / 1000
+        hash["trip_count"][Countries.name_to_code[cd.country]] = 1
       end
     end
     hash

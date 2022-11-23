@@ -10,6 +10,7 @@ json.total_distance trip.distance
 json.user_id trip.user_id
 json.age_at_trip trip.age_at_trip
 json.average_speed trip.average_speed
+json.center trip.center
 json.country_distances do
   json.array! trip.country_distances do |country|
     json.country country.country

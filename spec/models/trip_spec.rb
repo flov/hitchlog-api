@@ -101,4 +101,20 @@ RSpec.describe Trip, type: :model do
       expect(trip.average_speed).to eq("5 km/h")
     end
   end
+
+  describe "#center" do
+    it "returns the center of the trip" do
+      trip.from_lat = 1
+      trip.from_lng = 1
+      trip.to_lat = 2
+      trip.to_lng = 2
+      expect(trip.center).to eq('1.5,1.5')
+
+      trip.from_lat = -1
+      trip.from_lng = -1
+      trip.to_lat = -2
+      trip.to_lng = -2
+      expect(trip.center).to eq('-1.5,-1.5')
+    end
+  end
 end

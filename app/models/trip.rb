@@ -87,6 +87,10 @@ class Trip < ApplicationRecord
     country_distances.map(&:country)
   end
 
+  def center
+    [(from_lat + to_lat) /2, (from_lng + to_lng) / 2].join(",")
+  end
+
   def add_ride
     rides.build(number: rides.size + 1)
     save
