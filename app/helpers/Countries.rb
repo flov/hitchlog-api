@@ -25,7 +25,7 @@ class Countries
           lat: search.latitude,
           lng: search.longitude
         }
-        putc '.'
+        putc "."
       end
     end
   end

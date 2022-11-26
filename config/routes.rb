@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :statistics, only: [] do
     collection do
       get :top_10
+      get :age_for_trips
     end
   end
   resources :rides do

@@ -108,13 +108,58 @@ RSpec.describe Trip, type: :model do
       trip.from_lng = 1
       trip.to_lat = 2
       trip.to_lng = 2
-      expect(trip.center).to eq('1.5,1.5')
+      expect(trip.center).to eq("1.5,1.5")
 
       trip.from_lat = -1
       trip.from_lng = -1
       trip.to_lat = -2
       trip.to_lng = -2
-      expect(trip.center).to eq('-1.5,-1.5')
+      expect(trip.center).to eq("-1.5,-1.5")
+    end
+  end
+
+  describe "self.average_age_of_hitchhikers" do
+    it "returns the average age of the hitchhikers" do
+      create(:trip,
+        departure: DateTime.new(2020, 1, 1, 10, 0, 0),
+        arrival: DateTime.new(2020, 1, 1, 20, 0, 0),
+        user: create(
+          :user, date_of_birth: Date.new(2000, 1, 1)
+        ))
+      create(:trip,
+        departure: DateTime.new(2020, 1, 1, 10, 0, 0),
+        arrival: DateTime.new(2020, 1, 1, 20, 0, 0),
+        user: create(
+          :user, date_of_birth: Date.new(2002, 1, 1)
+        ))
+      # set departure to january 2020 at 10am
+      trip.departure = DateTime.new(2020, 1, 1, 10, 0, 0)
+      trip.arrival = DateTime.new(2020, 1, 1, 22, 0, 0)
+      trip.save
+      expect(Trip.average_age_of_hitchhikers).to eq(19)
+    end
+  end
+
+  describe "self.age_for_trips" do
+    it "returns the age of the trips" do
+      create(:trip,
+        departure: DateTime.new(2020, 1, 1, 10, 0, 0),
+        arrival: DateTime.new(2020, 1, 1, 20, 0, 0),
+        user: create(
+          :user, date_of_birth: Date.new(2000, 1, 1)
+        ))
+      create(:trip,
+        departure: DateTime.new(2020, 1, 1, 10, 0, 0),
+        arrival: DateTime.new(2020, 1, 1, 20, 0, 0),
+        user: create(
+          :user, date_of_birth: Date.new(2002, 1, 1)
+        ))
+      expect(Trip.age_for_trips).to eq(
+        [
+          {age: "18", trips_count: 1},
+          {age: "20", trips_count: 1}
+        ]
+      )
     end
   end
 end

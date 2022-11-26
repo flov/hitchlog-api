@@ -49,7 +49,7 @@ FactoryBot.define do
     password { "password" }
     cs_user { Faker::Internet.username(separators: %w[_]) }
     date_of_birth { 23.years.ago }
-    gender { Faker::Gender.binary_type }
+    gender { Faker::Gender.binary_type.downcase }
     about_you { Faker::Fantasy::Tolkien.poem }
     factory :confirmed_user do
       confirmed_at { Time.now }

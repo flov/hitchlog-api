@@ -24,11 +24,11 @@ class TripsController < ApplicationController
   def latest
     filter = {}
     if params[:photos].present?
-      filter['rides_photo_present'] = true
+      filter["rides_photo_present"] = true
     elsif params[:videos].present?
-      filter['rides_youtube_present'] = true
+      filter["rides_youtube_present"] = true
     elsif params[:stories].present?
-      filter['rides_story_present'] = true
+      filter["rides_story_present"] = true
     end
 
     @trips = Trip

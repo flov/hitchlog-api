@@ -88,7 +88,7 @@ class Trip < ApplicationRecord
   end
 
   def center
-    [(from_lat + to_lat) /2, (from_lng + to_lng) / 2].join(",")
+    [(from_lat + to_lat) / 2, (from_lng + to_lng) / 2].join(",")
   end
 
   def add_ride
@@ -108,5 +108,34 @@ class Trip < ApplicationRecord
 
   def to_coordinates
     [to_lat, to_lng].join(",")
+  end
+
+  def self.average_age_of_hitchhikers
+    array_of_ages = Trip.joins(:user).where.not(users: {date_of_birth: nil})
+      .select(:id, :departure, :"users.date_of_birth")
+      .map { |trip| ((trip.departure.to_date - trip.date_of_birth) / 365).to_i }
+      .delete_if { |x| x < 14 || x > 70 }
+
+    (array_of_ages.reduce(:+).to_f / array_of_ages.size).round
+  end
+
+  def self.age_for_trips
+    array_of_ages = Trip.joins(:user).where.not(users: {date_of_birth: nil})
+      .select(:id, :departure, :"users.date_of_birth")
+      .map { |trip| ((trip.departure.to_date - trip.date_of_birth) / 365).to_i }
+      .delete_if { |x| x < 14 || x > 70 }
+
+    hash = {}
+    array_of_ages.each do |age|
+      if hash[age]
+        hash[age] += 1
+      else
+        hash[age] = 1
+      end
+    end
+
+    hash.sort.to_h.map do |age, trips_count|
+      {age: age.to_s, trips_count: trips_count}
+    end
   end
 end

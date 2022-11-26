@@ -174,6 +174,26 @@ class User < ApplicationRecord
     username.capitalize
   end
 
+  def self.top_10
+    User
+      .joins(:trips)
+      .select("username, sum(trips.distance) as total_distance")
+      .group("username")
+      .map { |user|
+      {
+        username: user.username, total_distance: user.total_distance.to_i / 1000
+      }
+    }
+      .sort_by { |a| a[:total_distance] }[-11..]
+      .map { |user|
+      {
+        username: user[:username],
+        total_distance: user[:total_distance],
+        gender: User.find_by(username: user[:username]).gender
+      }
+    }
+  end
+
   private
 
   # Whitelist the User model attributes for sorting, except +password_digest+.
