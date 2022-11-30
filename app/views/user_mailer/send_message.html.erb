@@ -10,8 +10,9 @@
     <p>
       <%= @from_user.username.capitalize %> has sent you a message:
     </p>
-    <p>"<%= @message %>"</p>
-    <p>To reply, <%= link_to 'click here', "#{ENV['FRONTEND']}/hitchhikers/#{@to_user.username}/send_message"  %></p>
+    <p style='max-width: 400px;'>"<%= @message %>"</p>
+
+    <p>To reply, <%= link_to 'click here', "#{ENV['FRONTEND']}/hitchhikers/#{@from_user.username}/send_message"  %></p>
   </body>
   </head>
 </html>
