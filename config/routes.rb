@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     collection do
       get :top_10
       get :age_for_trips
+      get :users_by_gender
+      get :waiting_time
     end
   end
   resources :rides do

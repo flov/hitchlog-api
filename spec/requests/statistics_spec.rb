@@ -19,4 +19,21 @@ RSpec.describe "Statistics", type: :request do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe "GET /waiting_time" do
+    it "returns http success" do
+      get "/statistics/waiting_time", as: :json
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /users_by_gender" do
+    it "returns http success" do
+      create(:user, gender: 'male')
+      create(:user, gender: 'female')
+      create(:user, gender: 'non-binary')
+      get "/statistics/users_by_gender", as: :json
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
