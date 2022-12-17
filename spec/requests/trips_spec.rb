@@ -51,20 +51,27 @@ RSpec.describe "/trips", type: :request do
   let(:user_2_auth_headers) { JWTHelpers.auth_headers(headers, user_2) }
 
   describe "GET /index" do
-    context "searches with parameters" do
-      it "sorts by lat/lng bounds" do
-        create(:trip, from_lat: 42.5, from_lng: 12.5)
-        create(:trip, from_lat: 41, from_lng: 12.5)
-        get "/trips?q=%7B%22from_lat_lt%22%3A43%2C%22from_lat_gt%22%3A42%2C%22from_lng_gt%22%3A12%2C%22from_lng_lt%22%3A13%7D", as: :json
-        expect(response.body).to include("42.5")
-        expect(response.body).not_to include("41.0")
-      end
-    end
-
     it "renders a successful response" do
       create(:trip, from_city: "Kiew", to_city: "Krakow")
-      get trips_url, headers: user_auth_headers, as: :json
+      get trips_url, headers: headers, as: :json
       expect(response.body).to include("Kiew")
+    end
+
+    it "sorts by likes_count" do
+      create(:trip, from_city: 'Berlin', likes_count: 1)
+      create(:trip, from_city: 'Lisbon', likes_count: 0)
+      create(:trip, from_city: 'Warsaw', likes_count: 2)
+      get '/trips?q=%7B"rides_story_present"%3Afalse%7D&sort_by_likes=true', headers: headers
+      expect(JSON.parse(response.body)['trips'].first['origin']['city']).to eq('Warsaw')
+      expect(JSON.parse(response.body)['trips'].last['origin']['city']).to eq('Lisbon')
+    end
+
+    it "sorts by lat/lng bounds" do
+      create(:trip, from_lat: 42.5, from_lng: 12.5)
+      create(:trip, from_lat: 41, from_lng: 12.5)
+      get "/trips?q=%7B%22from_lat_lt%22%3A43%2C%22from_lat_gt%22%3A42%2C%22from_lng_gt%22%3A12%2C%22from_lng_lt%22%3A13%7D", as: :json
+      expect(response.body).to include("42.5")
+      expect(response.body).not_to include("41.0")
     end
   end
 

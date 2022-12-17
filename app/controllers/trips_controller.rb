@@ -6,14 +6,19 @@ class TripsController < ApplicationController
   def index
     @page = params[:page] || 1
     @trips = if params[:q].present?
+      parsed_q = JSON.parse(params[:q])
       @search = Trip.includes(
         :rides,
         :user,
         :country_distances
-      ).ransack(JSON.parse(params[:q]))
+      ).ransack(parsed_q)
+      if parsed_q["sort_by_likes"]
+        @search.sorts = 'likes_count desc'
+      else
+        @search.sorts = 'id desc'
+      end
       @trips = @search
         .result(distinct: true)
-        .order(created_at: :desc)
         .page(@page)
         .per(12)
     else
