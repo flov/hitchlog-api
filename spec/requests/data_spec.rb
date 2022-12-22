@@ -19,4 +19,10 @@ RSpec.describe "Data", type: :request do
       expect(response).to be_successful
     end
   end
+  describe "GET /countries" do
+    it "renders a successful response" do
+      get data_countries_url
+      expect(response).to be_successful
+    end
+  end
 end

@@ -13,6 +13,10 @@ class DataController < ApplicationController
     @data = @data_presenter.hitchhikers_with_most_stories
   end
 
+  def countries
+    @countries = CountryDistance.select(:country_code).distinct.map(&:country_code).compact.sort
+  end
+
   private
 
   def assign_data_presenter
