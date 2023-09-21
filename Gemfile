@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "3.1.3"
 
 gem "rails", "~> 7.0.3", ">= 7.0.3.1"
 gem "pg", "~> 1.1"
@@ -23,6 +23,8 @@ gem "fog-aws"
 gem "rmagick"
 gem "devise-jwt", "~> 0.10.0"
 gem "geocoder"
+
+gem "google_maps_service_ruby"
 
 group :development, :test do
   gem "dotenv-rails"
