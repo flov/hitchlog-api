@@ -15,8 +15,4 @@ class UserMailer < ApplicationMailer
       subject: "[Hitchlog] Contact form message from #{@name}"
     )
   end
-
-  def save_notification
-    puts "save_notification"
-  end
 end
