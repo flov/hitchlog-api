@@ -133,6 +133,13 @@ RSpec.describe "/rides", type: :request do
           put like_ride_url(ride.id), headers: auth_headers, as: :json
           expect(Trip.find(trip.id).likes_count).to eq(1)
         end
+
+        it "sends a notification email to the trip owner" do
+          expect {
+            put like_ride_url(ride.id), headers: auth_headers, as: :json
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          expect(ActionMailer::Base.deliveries.last.subject).to eq("[Hitchlog] Someone liked your ride!")
+        end
       end
 
       context "user has already liked the ride" do

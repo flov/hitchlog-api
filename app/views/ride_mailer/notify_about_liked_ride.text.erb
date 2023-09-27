@@ -1,0 +1,19 @@
+Hi <%= @user.username %>!
+
+Your <%= @ride.number %><%= ActiveSupport::Inflector.ordinal(@ride.number) %> ride of your logged trip:
+"<%= @trip.to_s %>",
+is getting popular. You received a like for this trip:
+<%- unless @ride.title.blank? %>
+
+Title: `<%= @ride.title %>`
+<%- end %>
+<%- unless @ride.story.blank? %>
+Story:
+----------------------------------------
+<%= truncate(@ride.story, length: 200) %>
+----------------------------------------
+<%- end %>
+
+url: <%= trip_url(@ride.trip) %>
+
+Happy hitchhiking :)

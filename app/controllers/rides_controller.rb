@@ -29,6 +29,7 @@ class RidesController < ApplicationController
     @like = @ride.likes.build(user: current_user)
     @ride.trip.update(likes_count: @ride.trip.likes_count + 1)
     if @like.save
+      RideMailer.notify_about_liked_ride(@ride).deliver_now
       render :show, status: :created, location: @trip
     else
       render json: @like.errors.messages.values.flatten, status: :unprocessable_entity

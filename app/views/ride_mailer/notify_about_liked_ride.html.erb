@@ -1,0 +1,21 @@
+<h1>Someone Liked your ride</h1>
+<p>Hi <%= @user.username %>!</p>
+<p>Your <%= @ride.number %><%= ActiveSupport::Inflector.ordinal(@ride.number) %> ride of your logged trip<br/>
+<b>"<%= @trip.to_s %>"</b>,
+<br/>is getting popular. You received a like for this trip:
+</p>
+<%- unless @ride.title.blank? %>
+<p>Title: `<%= @ride.title %>`</p>
+<%- end %>
+<%- unless @ride.story.blank? %>
+Story:
+<blockquote>
+<%= truncate(@ride.story, length: 200) %>
+</blockquote>
+<%- end %>
+
+<p>
+Url: <a href="<%= trip_url(@ride.trip) %>"><%= @ride.trip.to_param %></a>
+</p>
+
+Happy hitchhiking :)
