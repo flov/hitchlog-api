@@ -123,11 +123,13 @@ class TripsController < ApplicationController
 
   def update_trip
     # adds the origin and destination to the trip
-    if origin_params["origin"] && destination_params["destination"]
+    if origin_params["origin"]
       origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }
+    end
+    if destination_params["destination"]
       destination_params["destination"].each { |k, v| @trip.send("to_#{k}=", v) }
     end
-    if country_distances_params["trip"]["country_distances"]
+    if country_distances_params["trip"] && country_distances_params["trip"]["country_distances"]
       @trip.country_distances.build(
         country_distances_params["trip"]["country_distances"]
       )
