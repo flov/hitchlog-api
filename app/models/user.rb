@@ -195,16 +195,14 @@ class User < ApplicationRecord
   end
 
   def self.users_by_gender
-    all_users_with_gender = User.where.not(gender: nil).where.not(gender:'').count
+    all_users_with_gender = User.where.not(gender: nil).where.not(gender: "").count
     [
-      { label: 'male',
-        value: ((User.where(gender: "male").count.to_f / all_users_with_gender) * 100).round 
-      },
-      { label: 'non-binary',
-        value: ((User.where(gender: "non-binary").count.to_f / all_users_with_gender) * 100).round 
-      },
-      { label: 'female',
-        value: ((User.where(gender: "female").count.to_f / all_users_with_gender) * 100).round }
+      {label: "male",
+       value: ((User.where(gender: "male").count.to_f / all_users_with_gender) * 100).round},
+      {label: "non-binary",
+       value: ((User.where(gender: "non-binary").count.to_f / all_users_with_gender) * 100).round},
+      {label: "female",
+       value: ((User.where(gender: "female").count.to_f / all_users_with_gender) * 100).round}
     ]
   end
 

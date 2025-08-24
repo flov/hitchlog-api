@@ -58,12 +58,12 @@ RSpec.describe "/trips", type: :request do
     end
 
     it "sorts by likes_count" do
-      create(:trip, from_city: 'Berlin', likes_count: 1)
-      create(:trip, from_city: 'Lisbon', likes_count: 0)
-      create(:trip, from_city: 'Warsaw', likes_count: 2)
+      create(:trip, from_city: "Berlin", likes_count: 1)
+      create(:trip, from_city: "Lisbon", likes_count: 0)
+      create(:trip, from_city: "Warsaw", likes_count: 2)
       get '/trips?q=%7B"sort_by_likes":true%7D', headers: headers
-      expect(JSON.parse(response.body)['trips'].first['origin']['city']).to eq('Warsaw')
-      expect(JSON.parse(response.body)['trips'].last['origin']['city']).to eq('Lisbon')
+      expect(JSON.parse(response.body)["trips"].first["origin"]["city"]).to eq("Warsaw")
+      expect(JSON.parse(response.body)["trips"].last["origin"]["city"]).to eq("Lisbon")
     end
 
     it "sorts by lat/lng bounds" do

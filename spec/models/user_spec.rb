@@ -66,7 +66,7 @@ RSpec.describe User, type: :model do
   describe "User.top_10" do
     it "should return the top 10 users" do
       11.times do |i|
-        user = FactoryBot.create(:user, gender: 'male', username: "user#{i}", trips: [
+        FactoryBot.create(:user, gender: "male", username: "user#{i}", trips: [
           FactoryBot.create(:trip, distance: 1000 * (i + 1))
         ])
       end

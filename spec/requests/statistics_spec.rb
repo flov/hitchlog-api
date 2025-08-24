@@ -29,9 +29,9 @@ RSpec.describe "Statistics", type: :request do
 
   describe "GET /users_by_gender" do
     it "returns http success" do
-      create(:user, gender: 'male')
-      create(:user, gender: 'female')
-      create(:user, gender: 'non-binary')
+      create(:user, gender: "male")
+      create(:user, gender: "female")
+      create(:user, gender: "non-binary")
       get "/statistics/users_by_gender", as: :json
       expect(response).to have_http_status(:success)
     end

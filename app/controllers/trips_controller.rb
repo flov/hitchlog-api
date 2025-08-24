@@ -12,10 +12,10 @@ class TripsController < ApplicationController
         :user,
         :country_distances
       ).ransack(parsed_q)
-      if parsed_q["sort_by_likes"]
-        @search.sorts = 'likes_count desc'
+      @search.sorts = if parsed_q["sort_by_likes"]
+        "likes_count desc"
       else
-        @search.sorts = 'id desc'
+        "id desc"
       end
       @trips = @search
         .result(distinct: true)
@@ -123,12 +123,8 @@ class TripsController < ApplicationController
 
   def update_trip
     # adds the origin and destination to the trip
-    if origin_params["origin"]
-      origin_params["origin"].each { |k, v| @trip.send("from_#{k}=", v) }
-    end
-    if destination_params["destination"]
-      destination_params["destination"].each { |k, v| @trip.send("to_#{k}=", v) }
-    end
+    origin_params["origin"]&.each { |k, v| @trip.send("from_#{k}=", v) }
+    destination_params["destination"]&.each { |k, v| @trip.send("to_#{k}=", v) }
     if country_distances_params["trip"] && country_distances_params["trip"]["country_distances"]
       @trip.country_distances.build(
         country_distances_params["trip"]["country_distances"]

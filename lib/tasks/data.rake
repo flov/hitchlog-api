@@ -1,7 +1,7 @@
 namespace :data do
   desc "Geocode trips with missing distance"
   task geocode_trips_with_missing_distance: :environment do
-    gmaps = GoogleMapsService::Client.new(key: ENV['GOOGLE_MAPS'])
+    gmaps = GoogleMapsService::Client.new(key: ENV["GOOGLE_MAPS"])
     trips = Trip.where(distance: nil)
     if trips.none?
       puts "No trips to geocode"
@@ -10,7 +10,7 @@ namespace :data do
     end
     trips.each do |trip|
       directions = gmaps.directions(
-        trip.from_name, trip.to_name, mode: 'driving', units: 'metric'
+        trip.from_name, trip.to_name, mode: "driving", units: "metric"
       )
       if directions[0]
         trip.distance = directions[0][:legs][0][:distance][:value]
